@@ -1,0 +1,36 @@
+version: '3'
+services:
+  back:
+    build: ./back
+    tty: true
+    stdin_open: true
+    ports:
+      - "3000:3000"
+    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
+    volumes:
+      - ./back:/myapp
+      - bundle:/usr/local/bundle
+    depends_on:
+      - db
+  db:
+    image: bitnami/mariadb:latest
+    environment:
+      MYSQL_USER: root
+      MARIADB_ROOT_PASSWORD: password
+      # MYSQL_ALLOW_EMPTY_PASSWORD: "yes" #パスワードなしにしたい場合はこれ
+    ports:
+      - '3306:3306'
+    volumes:
+      - mysql_data:/var/lib/mysql
+  front:
+    build: ./front # dockerfileの場所
+    ports:
+      - "8080:8080"
+    command: yarn serve
+    volumes: # ホスト共有フォルダ : ゲスト共有フォルダ
+      - ./front:/app
+      - node_modules:/app/node_modules
+volumes:
+  bundle:
+  mysql_data:
+  node_modules:
