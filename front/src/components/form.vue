@@ -1,6 +1,6 @@
 <template>
   <form @submit.prevent="submit">
-    <textarea name="environment"></textarea>
+    <textarea name="situation" v-model="situation" placeholder="自分にストレスを与えた原因や状態を書いてください"></textarea>
     <button type="submit">submit</button>
   </form>
 </template>
@@ -10,14 +10,18 @@ import axios from 'axios';
 
 export default {
   name: 'From',
+  data(){
+    return {
+      situation: ''
+    }
+  },
   methods: {
-    submit(e){
-    // 本来はajax通信をする
-    console.log('exec')
-    console.log(e)
-    axios.post('http://localhost:3000/')
+    submit(){
+      const data = {situation: this.situation};
+      console.log(data)
+      axios.post('http://localhost:3000/environments', data)
+    }
   }
-}
 }
 </script>
 

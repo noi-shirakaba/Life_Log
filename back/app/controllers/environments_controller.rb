@@ -8,5 +8,7 @@ class EnvironmentsController < ApplicationController
   end
 
   def create
+    @environment = Environment.new(situation_params)
+    @environment.save
   end
 end
