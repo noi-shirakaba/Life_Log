@@ -18,7 +18,6 @@ export default {
   methods: {
     submit(){
       const data = {situation: this.situation};
-      console.log(data)
       axios.post('http://localhost:3000/environments', data)
     }
   }
