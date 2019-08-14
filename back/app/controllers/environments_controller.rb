@@ -4,10 +4,6 @@ class EnvironmentsController < ApplicationController
     @environment = Environment.all
   end
 
-  def new
-    @environment = Environment.new
-  end
-
   def create
     @environment = Environment.new(environment_params)
     @environment.save
