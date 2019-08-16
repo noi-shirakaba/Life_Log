@@ -7,7 +7,11 @@ module Api::V1
 
     def create
       @environment = Environment.new(environment_params)
-      @environment.save
+      if @environment.save
+        response_success(:environment, :create)
+      else
+        response_bad_request
+      end
     end
 
     def environment_params
