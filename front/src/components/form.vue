@@ -18,7 +18,8 @@ export default {
   methods: {
     submit(){
       const data = {situation: this.situation};
-      axios.post('http://localhost:3000/environments', data)
+      axios.post('http://localhost:3000/api/v1/environments', data)
+      .then((_response)=>{console.log(_response)})
     }
   }
 }
