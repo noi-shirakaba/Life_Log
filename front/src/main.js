@@ -1,7 +1,8 @@
 import Vue from 'vue'
 import App from './App.vue'
 import store from './store'
-import vuetify from './plugins/vuetify';
+import vuetify from './plugins/vuetify'
+import 'material-icons/iconfont/material-icons.css'
 
 Vue.config.productionTip = false
 
