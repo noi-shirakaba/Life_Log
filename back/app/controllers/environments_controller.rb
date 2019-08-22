@@ -12,4 +12,5 @@ class EnvironmentsController < ApplicationController
   def environment_params
     params.require(:environment).permit(:situation)
   end
+  before_action :authenticate_user! 
 end

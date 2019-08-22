@@ -10,6 +10,17 @@
   </head>
 
   <body>
+  <div class="notice">
+    <%= notice %>
+  </div>
+  <div class="alert">
+   <%= alert %>
+  </div>
+  <div class="session-control-box">
+      <% if signed_in? %>
+        <%= link_to 'sign out', destroy_user_session_path, method: :delete %>
+      <% end %>
+  </div>
     <%= yield %>
   </body>
 </html>
