@@ -4,7 +4,7 @@
     <textarea name="situation" v-model="situation" placeholder="自分にストレスを与えた原因や状態を書いてください"></textarea>
     <button type="submit">submit</button>
   </form>
-  <p v-for="e in environments" :key="e.id">{{e.situation}}</p>
+  <p v-for="env in environments" :key="env.id">{{env.situation}}</p>
 </div>
 </template>
 
