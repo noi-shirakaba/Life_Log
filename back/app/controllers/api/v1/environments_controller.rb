@@ -2,7 +2,8 @@ module Api::V1
   class EnvironmentsController < ApplicationController
     protect_from_forgery
     def index
-      render :json => Environment.all
+      @environment = Environment.all
+      render :json => @environment
     end
 
     def create

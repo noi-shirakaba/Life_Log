@@ -1,8 +1,11 @@
 <template>
+<div class="center">
   <form @submit.prevent="submit">
     <textarea name="situation" v-model="situation" placeholder="自分にストレスを与えた原因や状態を書いてください"></textarea>
     <button type="submit">submit</button>
   </form>
+  <p v-for="env in environments" :key="env.id">{{env.situation}}</p>
+</div>
 </template>
 
 <script>
@@ -12,8 +15,13 @@ export default {
   name: 'From',
   data(){
     return {
-      situation: ''
+      situation: '',
+      environments: []
     }
+  },
+  mounted() {
+    axios.get('http://localhost:3000/api/v1/environments.json')
+    .then(response => (this.environments = response.data))
   },
   methods: {
     submit(){
@@ -26,6 +34,9 @@ export default {
 </script>
 
 <style>
+.center {
+  text-align: center;
+}
 
 </style>
 
