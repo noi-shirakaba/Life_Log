@@ -20,13 +20,13 @@ export default {
     }
   },
   mounted() {
-    axios.get('http://localhost:3000/api/v1/environments.json')
+    axios.get(process.env.VUE_APP_ORIGIN + 'api/v1/environments.json')
     .then(response => (this.environments = response.data))
   },
   methods: {
     submit(){
       const data = {situation: this.situation};
-      axios.post('http://localhost:3000/api/v1/environments', data)
+      axios.post(process.env.VUE_APP_ORIGIN + 'api/v1/environments', data)
       .then((_response)=>{console.log(_response)})
     }
   }
