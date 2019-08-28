@@ -11,6 +11,8 @@
 <script>
 import axios from 'axios';
 
+const URL_BASE = process.env.VUE_APP_ORIGIN
+
 export default {
   name: 'From',
   data(){
@@ -20,13 +22,13 @@ export default {
     }
   },
   mounted() {
-    axios.get('http://localhost:3000/api/v1/environments.json')
+    axios.get(URL_BASE + 'api/v1/environments.json')
     .then(response => (this.environments = response.data))
   },
   methods: {
     submit(){
       const data = {situation: this.situation};
-      axios.post('http://localhost:3000/api/v1/environments', data)
+      axios.post(URL_BASE + 'api/v1/environments', data)
       .then((_response)=>{console.log(_response)})
     }
   }

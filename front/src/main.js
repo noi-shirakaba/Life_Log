@@ -4,8 +4,11 @@ import store from './store'
 import vuetify from './plugins/vuetify'
 import router from './router.js'
 import 'material-icons/iconfont/material-icons.css'
+import dotenv from 'dotenv';
 
 Vue.config.productionTip = false
+dotenv.config()
+
 
 new Vue({
   store,
