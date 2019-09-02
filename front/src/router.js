@@ -14,10 +14,10 @@ export default new Router({
       name: 'EnvForm',
       component: EnvForm
     },
-    // {
-    //   path:'/index',
-    //   name: 'Index',
-    //   component: Index
-    // }
+    {
+      path:'/index',
+      name: 'Index',
+      component: Index
+    }
   ]
 })

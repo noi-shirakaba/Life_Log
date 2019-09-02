@@ -4,7 +4,6 @@
     <textarea name="situation" v-model="situation" placeholder="自分にストレスを与えた原因や状態を書いてください"></textarea>
     <button type="submit">submit</button>
   </form>
-  <p>ほげほげ</p>
 </div>
 </template>
 
