@@ -9,7 +9,6 @@ import dotenv from 'dotenv';
 Vue.config.productionTip = false
 dotenv.config()
 
-
 new Vue({
   store,
   vuetify,

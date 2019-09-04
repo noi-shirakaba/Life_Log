@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Form from '@/components/form'
+import EnvForm  from './views/EnvForm.vue'
+import Index from './views/EnvironmentIndex.vue'
 
 Vue.use(Router)
 
@@ -10,7 +11,13 @@ export default new Router({
   routes: [
     {
       path: '/',
-      component: Form
+      name: 'EnvForm',
+      component: EnvForm
+    },
+    {
+      path:'/index',
+      name: 'Index',
+      component: Index
     }
   ]
 })
