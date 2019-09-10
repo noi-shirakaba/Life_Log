@@ -15,6 +15,11 @@ module Api::V1
       end
     end
 
+    def show
+      @environment = Environment.find(params[:id])
+      render :json => @environment
+    end
+    
     def environment_params
       params.require(:environment).permit(:situation)
     end
