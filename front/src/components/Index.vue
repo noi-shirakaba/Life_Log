@@ -1,6 +1,8 @@
 <template>
 <div class="center">
-  <p v-for="env in environments" :key="env.id">{{env.situation}}</p>
+  <ul v-for="env in environments" :key="env.id">
+    <li><router-link :to="{ name: 'Show', params: { id: env.id }}">{{env.situation}}</router-link></li>
+  </ul>
 </div>
 </template>
 
