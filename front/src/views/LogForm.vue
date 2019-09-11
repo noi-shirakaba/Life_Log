@@ -1,13 +1,12 @@
 <template>
-<Index />
+<InputForm />
 </template>
 
 <script>
-import Index from '../components/Index.vue'
+import InputForm from '@/components/InputForm.vue'
 export default {
-	name: 'EnvIndex',
 	components: {
-		Index
+		InputForm
 	}
 }
 </script>
