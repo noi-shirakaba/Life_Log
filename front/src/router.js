@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import EnvForm  from './views/EnvForm.vue'
 import Index from './views/EnvironmentIndex.vue'
 import Show from './views/EnvShow.vue'
+import Edit from '@/views/Edit.vue'
 
 Vue.use(Router)
 
@@ -24,6 +25,11 @@ export default new Router({
       path: '/show/:id',
       name: 'Show',
       component: Show
+    },
+    {
+      path: '/edit/:id',
+      name: 'Edit',
+      component: Edit
     }
   ]
 })
