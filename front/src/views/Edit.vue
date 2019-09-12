@@ -4,8 +4,9 @@
   <h2>環境：{{ logdata.situation }}</h2>
 	<form @submit.prevent="submit">
     <textarea name="edit" v-model="logdata.situation"></textarea>
-    <button type="submit">submit</button>
+    <button type="submit">変更する</button>
   </form>
+	<button @click="deleteLog">削除する</button>
 </div>
 </template>
 
@@ -28,11 +29,16 @@ export default {
 	methods: {
     submit(){
 			const payload = this.payload
-			const logdata = {situation: this.logdata.situation};
+			const logdata = {situation: this.logdata.situation}
 			console.log(logdata)
       axios.put(URL_BASE + 'api/v1/environments/' + payload, logdata)
       .then((_response)=>{console.log(_response)})
-    }
+		},
+		deleteLog(){
+			const payload = this.payload
+			axios.delete(URL_BASE + 'api/v1/environments/' + payload)
+      .then((_response)=>{console.log(_response)})
+		}
   }
 }
 </script>
