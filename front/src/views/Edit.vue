@@ -37,7 +37,9 @@ export default {
 		deleteLog(){
 			const payload = this.payload
 			axios.delete(URL_BASE + 'api/v1/environments/' + payload)
-      .then((_response)=>{console.log(_response)})
+			.then((_response)=>{console.log(_response)})
+			this.$router.push({ path: '/index' })
+			this.$router.go({ path: '/index' })
 		}
   }
 }
