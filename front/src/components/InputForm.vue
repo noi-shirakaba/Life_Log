@@ -23,7 +23,7 @@ export default {
     submit(){
       const data = {situation: this.situation};
       axios.post(URL_BASE + 'api/v1/environments', data)
-      .then((_response)=>{console.log(_response)})
+      // .then((_response)=>{console.log(_response)})
     }
   }
 }
