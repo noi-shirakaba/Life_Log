@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Form  from '@/views/LogForm.vue'
 import Index from '@/views/LogIndex.vue'
 import Show from '@/views/LogShow.vue'
+import Edit from '@/views/Edit.vue'
 
 Vue.use(Router)
 
@@ -24,6 +25,11 @@ export default new Router({
       path: '/show/:id',
       name: 'Show',
       component: Show
+    },
+    {
+      path: '/edit/:id',
+      name: 'Edit',
+      component: Edit
     }
   ]
 })
