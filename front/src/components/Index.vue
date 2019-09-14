@@ -12,7 +12,6 @@ import axios from 'axios';
 const URL_BASE = process.env.VUE_APP_ORIGIN
 
 export default {
-  name: 'Index',
   data(){
     return {
       environments: []
