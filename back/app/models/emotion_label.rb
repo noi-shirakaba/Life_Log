@@ -1,0 +1,2 @@
+class EmotionLabel < ApplicationRecord
+end
