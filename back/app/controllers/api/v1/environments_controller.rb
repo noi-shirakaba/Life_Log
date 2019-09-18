@@ -19,6 +19,18 @@ module Api::V1
       @environment = Environment.find(params[:id])
       render :json => @environment
     end
+
+    def update
+      @environment = Environment.find(params[:id])
+      @environment.update(environment_params)
+      render :json => @environment
+    end
+
+    def destroy
+      @environment = Environment.find(params[:id])
+      @environment.destroy
+      render :json => @environment
+    end
     
     def environment_params
       params.require(:environment).permit(:situation)

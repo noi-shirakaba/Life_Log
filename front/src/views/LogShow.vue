@@ -1,6 +1,7 @@
 <template>
 <div>
   <h2>{{ data.situation }}</h2>
+  <button><router-link :to="{ name: 'Edit', params: { id: payload }}">編集</router-link></button>
 </div>
 </template>
 
