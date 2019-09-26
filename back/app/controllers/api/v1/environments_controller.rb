@@ -1,6 +1,7 @@
 module Api::V1
   class EnvironmentsController < ApplicationController
-    protect_from_forgery
+    skip_before_action :authenticate!, only: [:create,:update,:destroy]
+    protect_from_forgery :except => [:create]
     def index
       @environment = Environment.all
       render :json => @environment
