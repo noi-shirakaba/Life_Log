@@ -4,6 +4,8 @@ module Api::V1
 		protect_from_forgery :except => [:create]
 
 		def create
+			p "==================================="
+			p params 
 			@emotion_percent = EmotionsEmotionLabel.new(emotions_percent_params)
       if @emotion_percent.save
 				response_success(:emotions_emotion_label, :create)

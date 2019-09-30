@@ -17,8 +17,10 @@
         <button v-on:click="deleteForm" class="btn btn-primary" type="submit">削除</button>
         <form v-for="percent of percents" :key="percent.id">
           <!-- <input type="text" v-model="newItem" class="form-category"> -->
-          <input type="text" v-on:keyup.delete.once="deleteCheckValue" v-model="percent.value" class="form-percent">
+          <!-- <input type="text" v-on:keyup.delete.once="deleteCheckValue" v-model="percent.value" class="form-percent"> -->
+          <input type="text" v-model="percent.value" :key="percent.id" class="form-percent">
         </form>
+        <button v-on:click="submitPercents" class="btn btn-primary" type="submit">送信</button>
       </div>
     </div>
   </ul>
@@ -36,92 +38,40 @@ export default {
     return {
       errors: [],
       situation: '',
-      percents: [{id: 0, value: ""}],
-      defaultValue: 0,
-      checkValue: 0
+      percents: [{id: 0, value: ''}],
     }
   },
   methods: {
-    // checkForm(e) {
-    //   if (this.percents[checkIndex].value <= 100) {
-    //     return true;
-    //   }
-
-    //   this.errors = [];
-
-    //   if (this.percents[checkIndex].value >= 101) {
-    //     this.errors.push('100%以下にしてください');
-    //   }
-
-    //   e.preventDefault();
-    // },
     submit(){
-      const data = {situation: this.situation};
+      const data = {situation: this.situation}
       axios.post(URL_BASE + 'api/v1/environments', data)
       // .then((_response)=>{console.log(_response)})
     },
-    addForm(e){
-      const checkIndex = this.percents.length - 1
-      this.errors = [];
-      if (Number(this.checkValue) + Number(this.percents[checkIndex].value) < 100) {
-        this.checkValue = Number(this.checkValue) + Number(this.percents[checkIndex].value)
-        let lastIndex = this.percents.slice(-1)[0].id
-        lastIndex += 1
-        this.percents.push({id: lastIndex, value: ""})
-        console.log(this.checkValue)
-        return true;
-      } else if (Number(this.checkValue) + Number(this.percents[checkIndex].value) === 100) {
-        this.checkValue = Number(this.checkValue) + Number(this.percents[checkIndex].value)
-        console.log(this.checkValue)
-        return true;
-      } else {
-        this.errors.push('100%以下にしてください');
-      }
-      console.log(e)
-      e.preventDefault();
-      // const checkIndex = this.percents.length - 1
-      // switch(this.defaultValue) {
-      //   case this.defaultValue === 0 && this.checkValue < 100:
-      //     this.checkValue = Number(this.checkValue) + Number(this.percents[checkIndex].value)
-      //     console.log(this.checkValue)
-      //     let lastIndex = this.percents.slice(-1)[0].id
-      //     lastIndex += 1
-      //     this.percents.push({id: lastIndex, value: 0})
-      //     break;
-      //   case this.percents[checkIndex].value === 100:
-      //     break;
-      //   default:
-      //     this.checkValue =  Number(this.percents[checkIndex].value)
-      //     break;
-      // }
-      // if (defaultValue === 0 && this.percents[checkIndex].value <= 100 ) {
-      //   defaultValue += 1
-      //   let checkValue = this.percents[checkIndex].value
-      //   console.log(checkValue)
-      //   let lastIndex = this.percents.slice(-1)[0].id
-      //   lastIndex += 1
-      //   this.percents.push({id: lastIndex, value: 0});
-      // }else if (checkValue === 100){
-      //   checkValue = checkValue + this.percents[checkIndex].value
-      //   console.log(checkValue)
-      // }else if (checkValue < 100){
-      //   checkValue = checkValue + this.percents[checkIndex].value
-      //   console.log(checkValue)
-      //   let lastIndex = this.percents.slice(-1)[0].id
-      //   lastIndex += 1
-      //   this.percents.push({id: lastIndex, value: 0});
-      // }else {
-
-      // }
-    },
-    deleteCheckValue() {
-      const checkIndex = this.percents.length - 1
-      this.checkValue = Number(this.checkValue) - Number(this.percents[checkIndex].value)
-      console.log(this.checkValue)
+    addForm(){
+      let lastIndex = this.percents.slice(-1)[0].id
+      lastIndex += 1
+      this.percents.push({id: lastIndex, value: ""})
+      console.log(this.percents)
     },
     deleteForm(){
-      if (this.percents.length > 1) {
-        this.percents.pop();
+     if (this.percents.length > 1) {
+        this.percents.pop()
+      }
+    },
+    submitPercents(){
+      let checkValue = 0
+      for (let checkPercent of this.percents) {
+        checkValue = checkValue + Number(checkPercent.value)
+      }
+      if (checkValue > 100) {
+        console.log("エラー")
+      } else {
+        let percentValue = this.percents.map(function( percent ){
+          return Number(percent.value)
+        })
+        console.log(percentValue)
+        axios.post(URL_BASE + 'api/v1/emotions_emotion_labels', percentValue)
+        console.log("OK")
       }
     }
   }
