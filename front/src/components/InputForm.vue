@@ -39,11 +39,13 @@ export default {
       errors: [],
       situation: '',
       percents: [{id: 0, value: ''}],
+      percent: ''
     }
   },
   methods: {
     submit(){
       const data = {situation: this.situation}
+      console.log(data)
       axios.post(URL_BASE + 'api/v1/environments', data)
       // .then((_response)=>{console.log(_response)})
     },
@@ -69,8 +71,10 @@ export default {
         let percentValue = this.percents.map(function( percent ){
           return Number(percent.value)
         })
-        console.log(percentValue)
-        axios.post(URL_BASE + 'api/v1/emotions_emotion_labels', percentValue)
+        const data = {percent: percentValue}
+        console.log(data)
+        axios.post(URL_BASE + 'api/v1/emotions_emotion_labels', data)
+        .then((_response)=>{console.log(_response)})
         console.log("OK")
       }
     }

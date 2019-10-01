@@ -34,6 +34,7 @@ module Api::V1
     end
     
     def environment_params
+      # binding.pry
       params.require(:environment).permit(:situation)
     end
   end
