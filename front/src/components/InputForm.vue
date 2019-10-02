@@ -1,12 +1,6 @@
 <template>
 <div class="center">
-  <p v-if="errors.length">
-    <b>Please correct the following error(s):</b>
-    <ul>
-      <li v-for="error in errors">{{ error }}</li>
-    </ul>
-  </p>
-  <form @submit.prevent="submit">
+  <form @submit.prevent="submitSituations">
     <textarea name="situation" v-model="situation" placeholder="自分にストレスを与えた原因や状態を書いてください"></textarea>
     <button type="submit">submit</button>
   </form>
@@ -16,8 +10,6 @@
         <button v-on:click="addForm" class="btn btn-primary" type="submit">追加</button>
         <button v-on:click="deleteForm" class="btn btn-primary" type="submit">削除</button>
         <form v-for="percent of percents" :key="percent.id">
-          <!-- <input type="text" v-model="newItem" class="form-category"> -->
-          <!-- <input type="text" v-on:keyup.delete.once="deleteCheckValue" v-model="percent.value" class="form-percent"> -->
           <input type="text" v-model="percent.value" :key="percent.id" class="form-percent">
         </form>
         <button v-on:click="submitPercents" class="btn btn-primary" type="submit">送信</button>
@@ -36,16 +28,14 @@ export default {
   name: 'Form',
   data(){
     return {
-      errors: [],
       situation: '',
       percents: [{id: 0, value: ''}],
       percent: ''
     }
   },
   methods: {
-    submit(){
+    submitSituations(){
       const data = {situation: this.situation}
-      console.log(data)
       axios.post(URL_BASE + 'api/v1/environments', data)
       // .then((_response)=>{console.log(_response)})
     },
@@ -53,7 +43,6 @@ export default {
       let lastIndex = this.percents.slice(-1)[0].id
       lastIndex += 1
       this.percents.push({id: lastIndex, value: ""})
-      console.log(this.percents)
     },
     deleteForm(){
      if (this.percents.length > 1) {
@@ -65,17 +54,15 @@ export default {
       for (let checkPercent of this.percents) {
         checkValue = checkValue + Number(checkPercent.value)
       }
-      if (checkValue > 100) {
-        console.log("エラー")
-      } else {
+      if (checkValue === 100) {
         let percentValue = this.percents.map(function( percent ){
           return Number(percent.value)
         })
         const data = {percent: percentValue}
-        console.log(data)
         axios.post(URL_BASE + 'api/v1/emotions_emotion_labels', data)
-        .then((_response)=>{console.log(_response)})
-        console.log("OK")
+        // .then((_response)=>{console.log(_response)})
+      } else {
+          alert("合計100%になるようにしてください");
       }
     }
   }
