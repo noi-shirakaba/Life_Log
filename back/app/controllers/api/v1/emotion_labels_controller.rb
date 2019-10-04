@@ -11,13 +11,13 @@ module Api::V1
 					@emotion_category.save!
 				end
 			end
-				response_success(:emotion_labels, :create)
+				response_success(:emotion_label, :create)
 			rescue => e
 				response_bad_request
 		end
 
 		def emotions_category_params
-      params.require(:emotion_labels).permit(category: [])
+      params.require(:emotion_label).permit(category: [])
 		end
 	end
 end
