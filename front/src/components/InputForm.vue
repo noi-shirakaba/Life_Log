@@ -9,9 +9,14 @@
       <div class="input-group">
         <button v-on:click="addForm" class="btn btn-primary" type="submit">追加</button>
         <button v-on:click="deleteForm" class="btn btn-primary" type="submit">削除</button>
-        <form v-for="percent of percents" :key="percent.id">
-          <input type="text" v-model="percent.value" :key="percent.id" class="form-percent">
+        <form v-for="category of categorys" :key="category.id">
+          <input type="text" v-model="category.value" :key="category.id" class="form-category">
         </form>
+        <div>
+          <form v-for="percent of percents" :key="percent.id">
+            <input type="text" v-model="percent.value" :key="percent.id" class="form-percent">
+          </form>
+        </div>
         <button v-on:click="submitPercents" class="btn btn-primary" type="submit">送信</button>
       </div>
     </div>
@@ -30,7 +35,9 @@ export default {
     return {
       situation: '',
       percents: [{id: 0, value: ''}],
-      percent: ''
+      percent: '',
+      categorys: [{id: 0, value: ''}],
+      category: ''
     }
   },
   methods: {
@@ -41,12 +48,16 @@ export default {
     },
     addForm(){
       let lastIndex = this.percents.slice(-1)[0].id
+      let lastCategoryIndex = this.categorys.slice(-1)[0].id
       lastIndex += 1
+      lastCategoryIndex += 1
       this.percents.push({id: lastIndex, value: ""})
+      this.categorys.push({id: lastCategoryIndex, value: ''})
     },
     deleteForm(){
-     if (this.percents.length > 1) {
+     if (this.percents.length > 1 || this.categorys.length > 1 ) {
         this.percents.pop()
+        this.categorys.pop()
       }
     },
     submitPercents(){
@@ -54,15 +65,24 @@ export default {
       for (let checkPercent of this.percents) {
         checkValue = checkValue + Number(checkPercent.value)
       }
-      if (checkValue === 100) {
+      if (checkValue === 100 && this.categorys.length > 0) {
+        console.log(this.categorys.length)
         let percentValue = this.percents.map(function( percent ){
           return Number(percent.value)
         })
+        let categoryValue = this.categorys.map(function( category ){
+          console.log(category.value)
+          return category.value
+        })
         const data = {percent: percentValue}
+        const categoryData = {category: categoryValue}
+        console.log(categoryData)
         axios.post(URL_BASE + 'api/v1/emotions_emotion_labels', data)
-        // .then((_response)=>{console.log(_response)})
+        .then((_response)=>{console.log(_response)})
+        axios.post(URL_BASE + 'api/v1/emotion_labels', categoryData)
+        .then((_response)=>{console.log(_response)})
       } else {
-          alert("合計100%になるようにしてください");
+          alert("合計100%になるようにするか、カテゴリーを入力してください。");
       }
     }
   }
