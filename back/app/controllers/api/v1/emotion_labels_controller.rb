@@ -4,7 +4,6 @@ module Api::V1
 		protect_from_forgery :except => [:create]
 
 		def create
-			# binding.pry
 			EmotionLabel.transaction do
 				emotions_category_params["category"].each do |emotion_category|
 					@emotion_category = EmotionLabel.new(category: emotion_category)

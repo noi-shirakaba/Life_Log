@@ -17,7 +17,7 @@
             <input type="text" v-model="percent.value" :key="percent.id" class="form-percent">
           </form>
         </div>
-        <button v-on:click="submitPercents" class="btn btn-primary" type="submit">送信</button>
+        <button v-on:click="submitPosts" class="btn btn-primary" type="submit">送信</button>
       </div>
     </div>
   </ul>
@@ -60,7 +60,7 @@ export default {
         this.categorys.pop()
       }
     },
-    submitPercents(){
+    submitPosts(){
       let checkValue = 0
       for (let checkPercent of this.percents) {
         checkValue = checkValue + Number(checkPercent.value)
@@ -74,15 +74,15 @@ export default {
           console.log(category.value)
           return category.value
         })
-        const data = {percent: percentValue}
-        const categoryData = {category: categoryValue}
-        console.log(categoryData)
-        axios.post(URL_BASE + 'api/v1/emotions_emotion_labels', data)
-        .then((_response)=>{console.log(_response)})
-        axios.post(URL_BASE + 'api/v1/emotion_labels', categoryData)
-        .then((_response)=>{console.log(_response)})
+        async function submitFunc() {
+          const data = {percent: percentValue}
+          const categoryData = {category: categoryValue}
+          await axios.post(URL_BASE + 'api/v1/emotions_emotion_labels', data).then((_response)=>{console.log(_response)})
+          await axios.post(URL_BASE + 'api/v1/emotion_labels', categoryData).then((_response)=>{console.log(_response)})
+        }
+        submitFunc()
       } else {
-          alert("合計100%になるようにするか、カテゴリーを入力してください。");
+        alert("合計100%になるようにするか、カテゴリーを入力してください。");
       }
     }
   }
