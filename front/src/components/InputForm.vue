@@ -12,7 +12,7 @@
         <form v-for="percent of percents" :key="percent.id">
           <input type="text" v-model="percent.value" :key="percent.id" class="form-percent">
         </form>
-        <button v-on:click="submitPercents" class="btn btn-primary" type="submit">送信</button>
+        <button v-on:click="submitPosts" class="btn btn-primary" type="submit">送信</button>
       </div>
     </div>
   </ul>
@@ -25,7 +25,6 @@ import axios from 'axios';
 const URL_BASE = process.env.VUE_APP_ORIGIN
 
 export default {
-  name: 'Form',
   data(){
     return {
       situation: '',
@@ -49,7 +48,7 @@ export default {
         this.percents.pop()
       }
     },
-    submitPercents(){
+    submitPosts(){
       let checkValue = 0
       for (let checkPercent of this.percents) {
         checkValue = checkValue + Number(checkPercent.value)
@@ -61,6 +60,11 @@ export default {
         const data = {percent: percentValue}
         axios.post(URL_BASE + 'api/v1/emotions_emotion_labels', data)
         // .then((_response)=>{console.log(_response)})
+        async function submitFunc() {
+         const data = {percent: percentValue}
+         await axios.post(URL_BASE + 'api/v1/emotions_emotion_labels', data).then((_response)=>{console.log(_response)})
+        }
+        submitFunc()
       } else {
           alert("合計100%になるようにしてください");
       }
