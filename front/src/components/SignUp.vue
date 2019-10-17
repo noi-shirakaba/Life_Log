@@ -1,15 +1,16 @@
 <template>
-<div id="login">
-  <h1>Login</h1>
+<div id="signup">
+  <h1>Sign Up</h1>
   <v-app>
     <v-form @submit.prevent="submitted">
+      <input type="text" name="name" placeholder="名前">
       <input type="text" name="email" placeholder="メール">
       <input type="password" name="password" placeholder="パスワード">
       <v-btn
         type="submit"
         outlline rounded
       >
-        ログイン
+        登録
       </v-btn>
       <v-alert
         :value="alert"        
@@ -18,11 +19,11 @@
         dismissible
         transition="scale-transition"
       >
-        ログイン出来ませんでした
+        登録出来ませんでした
       </v-alert>
     </v-form>
     <div id="nav">
-      | <router-link to="/signup">新規登録の方はこちら</router-link> |
+      | <router-link to="/login">既に登録済の方はこちら</router-link> |
     </div>
   </v-app>
 </div>
@@ -44,8 +45,9 @@ export default {
       const data = new FormData(e.target);
       const obj = {
         user: {
+          name: data.get("name"),
           email: data.get("email"),
-          password: data.get("password"),
+          password: data.get("password")
         }
       };
       //API option
@@ -54,16 +56,16 @@ export default {
       };
       // 送信する
       axios
-        .post(URL_BASE + '/api/v1/users/login', obj, config)
-        .then(response => {
-        // ログインに成功した
+        .post(URL_BASE + '/api/v1/users', obj, config)
+        .then(response => {    
+          // ログインに成功した
           const data = response.data;
-        // 画面移動
+          // 画面移動
           this.$router.replace(this.$route.query.redirect || '/home')
-        // LocalStorage に トークンを保存する
+          // LocalStorage に トークンを保存する
           localStorage.token = data.token;
-        }, 
-        error => {
+        },
+          error => {
           // ログインに失敗した
           this.alert = true;
           window.setTimeout(() => {
