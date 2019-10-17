@@ -1,8 +1,7 @@
 <template>
 <div class="center">
-  <form @submit.prevent="submitSituations">
+  <form>
     <textarea name="situation" v-model="situation" placeholder="自分にストレスを与えた原因や状態を書いてください"></textarea>
-    <button type="submit">submit</button>
   </form>
   <ul>
     <div class="form-group">
@@ -28,6 +27,8 @@
 import axios from 'axios';
 
 const URL_BASE = process.env.VUE_APP_ORIGIN
+const PERCENT_MAX = 100
+const PERCENT_MIN = 0
 
 export default {
   data(){
@@ -40,11 +41,6 @@ export default {
     }
   },
   methods: {
-    submitSituations(){
-      const data = {situation: this.situation}
-      axios.post(URL_BASE + 'api/v1/environments', data)
-      // .then((_response)=>{console.log(_response)})
-    },
     addForm(){
       let lastIndex = this.percents.slice(-1)[0].id
       let lastCategoryIndex = this.categorys.slice(-1)[0].id
@@ -61,6 +57,7 @@ export default {
     },
     submitPosts(){
       let checkValue = 0
+      const situationData = {situation: this.situation}
       for (let checkPercent of this.percents) {
         checkValue = checkValue + Number(checkPercent.value)
       }
@@ -74,9 +71,10 @@ export default {
           return category.value
         })
         async function submitFunc() {
-          const data = {percent: percentValue}
+          const percentData = {percent: percentValue}
           const categoryData = {category: categoryValue}
-          await axios.post(URL_BASE + 'api/v1/emotions_emotion_labels', data).then((_response)=>{console.log(_response)})
+          await axios.post(URL_BASE + 'api/v1/environments', situationData).then((_response)=>{console.log(_response)})
+          await axios.post(URL_BASE + 'api/v1/emotions_emotion_labels', percentData).then((_response)=>{console.log(_response)})
           await axios.post(URL_BASE + 'api/v1/emotion_labels', categoryData).then((_response)=>{console.log(_response)})
         }
         submitFunc()
