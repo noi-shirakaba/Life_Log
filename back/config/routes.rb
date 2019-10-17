@@ -4,7 +4,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :environments, only: [:index, :create, :show, :update, :destroy]
       resources :emotions_emotion_labels, only: [:create]
-      # resources :emotions_labels, only: [:create]
+      resources :emotion_labels, only: [:create]
       resources :users do
         collection do
           post 'login'

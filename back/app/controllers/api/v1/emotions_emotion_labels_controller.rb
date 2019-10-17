@@ -16,7 +16,7 @@ module Api::V1
 		end
 
 		def emotions_percent_params
-      params.require(:emotions_emotion_label).permit(percent: [])
+			params.require(:emotions_emotion_label).permit(percent: [])
 		end
 	end
 end
