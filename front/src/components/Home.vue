@@ -1,5 +1,6 @@
 <template>
-<div class="user">
+<div class="home">
+  <h1>Home</h1>
   <button type="submit">確認</button>
 </div>
 </template>
@@ -10,7 +11,6 @@ import axios from 'axios';
 const URL_BASE = process.env.VUE_APP_ORIGIN
 
 export default {
-  name: 'Home',
   data(){
     return {
       environments: []
@@ -21,9 +21,5 @@ export default {
 }
 </script>
 
-<style>
-.center {
-  text-align: center;
-}
-
+<style scoped>
 </style>
