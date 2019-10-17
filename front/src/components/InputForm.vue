@@ -27,6 +27,8 @@
 import axios from 'axios';
 
 const URL_BASE = process.env.VUE_APP_ORIGIN
+const PERCENT_MAX = 100
+const PERCENT_MIN = 0
 
 export default {
   data(){
