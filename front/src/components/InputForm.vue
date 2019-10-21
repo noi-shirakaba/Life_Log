@@ -21,7 +21,7 @@
             <input type="text" v-model="percent.value" :key="percent.id" class="form-percent">
           </form>
         </div>
-        <button v-on:click="submitPosts" class="btn btn-primary" type="submit">送信</button>
+        <button v-on:click="checkForm" class="btn btn-primary" type="submit">送信</button>
       </div>
     </div>
   </ul>
@@ -61,7 +61,7 @@ export default {
         this.categorys.pop()
       }
     },
-    submitPosts(e) {
+    checkForm(e) {
       let checkValue = 0
       const situationData = {situation: this.situation}
       for (let checkPercent of this.percents) {
@@ -74,29 +74,9 @@ export default {
           break
         }
       }
-      // if (checkValue === PERCENT_MAX && this.categorys.length > PERCENT_MIN) {
-      //   // console.log(this.categorys.length)
-      //   let percentValue = this.percents.map(function( percent ){
-      //     return Number(percent.value)
-      //   })
-      //   let categoryValue = this.categorys.map(function( category ){
-      //     // console.log(category.value)
-      //     return category.value
-      //   })
-      //   async function submitFunc() {
-      //     const percentData = {percent: percentValue}
-      //     const categoryData = {category: categoryValue}
-      //     await axios.post(URL_BASE + 'api/v1/environments', situationData).then((_response)=>{console.log(_response)})
-      //     await axios.post(URL_BASE + 'api/v1/emotions_emotion_labels', percentData).then((_response)=>{console.log(_response)})
-      //     await axios.post(URL_BASE + 'api/v1/emotion_labels', categoryData).then((_response)=>{console.log(_response)})
-      //   }
-      //   submitFunc()
-      // } else {
-      //   this.errors.push('合計100%になるようにするか、カテゴリーを入力してください。')
-      // }
       e.preventDefault();
     },
-    hoge(checkValue) {
+    submitPosts(checkValue) {
       if (checkValue === PERCENT_MAX && this.categorys.length > PERCENT_MIN) {
         // console.log(this.categorys.length)
         let percentValue = this.percents.map(function( percent ){
@@ -116,8 +96,6 @@ export default {
         submitFunc()
       } else {
         this.errors.push('合計100%になるようにするか、カテゴリーを入力してください。')
-      }
-        // e.preventDefault();
       }
     }
 }
