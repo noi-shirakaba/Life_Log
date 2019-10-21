@@ -68,7 +68,7 @@ export default {
         if(checkPercent.value && Number(checkPercent.value)) {
           console.log(checkPercent.value)
           checkValue = checkValue + Number(checkPercent.value)
-          this.hoge(checkValue)
+          this.submitPosts(checkValue)
         }else{
           this.errors.push('Please enter a number or Percent required.')
           break
