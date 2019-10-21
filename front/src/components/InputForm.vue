@@ -1,5 +1,10 @@
 <template>
 <div class="center">
+  <p v-if="errors.length">
+    <ul>
+      <li v-for="error in errors" id="error">{{ error }}</li>
+    </ul>
+  </p>
   <form>
     <textarea name="situation" v-model="situation" placeholder="自分にストレスを与えた原因や状態を書いてください"></textarea>
   </form>
@@ -33,6 +38,7 @@ const PERCENT_MIN = 0
 export default {
   data(){
     return {
+      errors: [],
       situation: '',
       percents: [{id: 0, value: ''}],
       percent: '',
@@ -55,19 +61,49 @@ export default {
         this.categorys.pop()
       }
     },
-    submitPosts(){
+    submitPosts(e) {
       let checkValue = 0
       const situationData = {situation: this.situation}
       for (let checkPercent of this.percents) {
-        checkValue = checkValue + Number(checkPercent.value)
+        if(checkPercent.value && Number(checkPercent.value)) {
+          console.log(checkPercent.value)
+          checkValue = checkValue + Number(checkPercent.value)
+          this.hoge(checkValue)
+        }else{
+          this.errors.push('Please enter a number or Percent required.')
+          break
+        }
       }
-      if (checkValue === 100 && this.categorys.length > 0) {
-        console.log(this.categorys.length)
+      // if (checkValue === PERCENT_MAX && this.categorys.length > PERCENT_MIN) {
+      //   // console.log(this.categorys.length)
+      //   let percentValue = this.percents.map(function( percent ){
+      //     return Number(percent.value)
+      //   })
+      //   let categoryValue = this.categorys.map(function( category ){
+      //     // console.log(category.value)
+      //     return category.value
+      //   })
+      //   async function submitFunc() {
+      //     const percentData = {percent: percentValue}
+      //     const categoryData = {category: categoryValue}
+      //     await axios.post(URL_BASE + 'api/v1/environments', situationData).then((_response)=>{console.log(_response)})
+      //     await axios.post(URL_BASE + 'api/v1/emotions_emotion_labels', percentData).then((_response)=>{console.log(_response)})
+      //     await axios.post(URL_BASE + 'api/v1/emotion_labels', categoryData).then((_response)=>{console.log(_response)})
+      //   }
+      //   submitFunc()
+      // } else {
+      //   this.errors.push('合計100%になるようにするか、カテゴリーを入力してください。')
+      // }
+      e.preventDefault();
+    },
+    hoge(checkValue) {
+      if (checkValue === PERCENT_MAX && this.categorys.length > PERCENT_MIN) {
+        // console.log(this.categorys.length)
         let percentValue = this.percents.map(function( percent ){
           return Number(percent.value)
         })
         let categoryValue = this.categorys.map(function( category ){
-          console.log(category.value)
+          // console.log(category.value)
           return category.value
         })
         async function submitFunc() {
@@ -79,10 +115,11 @@ export default {
         }
         submitFunc()
       } else {
-        alert("合計100%になるようにするか、カテゴリーを入力してください。");
+        this.errors.push('合計100%になるようにするか、カテゴリーを入力してください。')
+      }
+        // e.preventDefault();
       }
     }
-  }
 }
 </script>
 
@@ -95,5 +132,8 @@ export default {
 }
 .form-percent {
   background-color: aquamarine;
+}
+#error {
+  color: red;
 }
 </style>
