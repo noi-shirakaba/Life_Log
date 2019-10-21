@@ -97,6 +97,7 @@ export default {
       } else {
         this.errors.push('合計100%になるようにするか、カテゴリーを入力してください。')
       }
+      }
     }
 }
 </script>
