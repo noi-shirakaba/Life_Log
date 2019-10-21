@@ -63,7 +63,6 @@ export default {
     },
     checkForm(e) {
       let checkValue = 0
-      const situationData = {situation: this.situation}
       for (let checkPercent of this.percents) {
         if(checkPercent.value && Number(checkPercent.value)) {
           console.log(checkPercent.value)
@@ -77,6 +76,7 @@ export default {
       e.preventDefault();
     },
     submitPosts(checkValue) {
+      const situationData = {situation: this.situation}
       if (checkValue === PERCENT_MAX && this.categorys.length > PERCENT_MIN) {
         // console.log(this.categorys.length)
         let percentValue = this.percents.map(function( percent ){
