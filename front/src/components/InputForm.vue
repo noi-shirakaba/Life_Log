@@ -1,30 +1,54 @@
 <template>
 <div class="center">
-  <p v-if="errors.length">
-    <ul>
-      <li v-for="error in errors" id="error">{{ error }}</li>
-    </ul>
-  </p>
-  <form>
-    <textarea name="situation" v-model="situation" placeholder="自分にストレスを与えた原因や状態を書いてください"></textarea>
-  </form>
-  <ul>
-    <div class="form-group">
-      <div class="input-group">
-        <button v-on:click="addForm" class="btn btn-primary" type="submit">追加</button>
-        <button v-on:click="deleteForm" class="btn btn-primary" type="submit">削除</button>
-        <form v-for="category of categorys" :key="category.id">
-          <input type="text" v-model="category.value" :key="category.id" class="form-category">
-        </form>
-        <div>
-          <form v-for="percent of percents" :key="percent.id">
-            <input type="text" v-model="percent.value" :key="percent.id" class="form-percent">
-          </form>
-        </div>
-        <button v-on:click="checkForm" class="btn btn-primary" type="submit">送信</button>
+  <v-form ref="form" v-model="valid" lazy-validation>
+    <p v-if="this.errorMessages">
+      <ul>
+        <li v-for="error in errorMessages" id="error">{{ error }}</li>
+      </ul>
+    </p>
+    <v-form>
+      <v-text-field
+        v-model="situation"
+        type="text"
+        :rules="situationRules"
+        :counter="0"
+        label="環境"
+        required
+        outlined
+      ></v-text-field>
+    </v-form>
+    <div>
+      <v-btn @click="addForm">追加</v-btn>
+      <v-btn @click="deleteForm">削除</v-btn>
+      <v-form v-for="category of categorys" :key="category.id">
+        <v-text-field
+          v-model="category.value"
+          :key="category.id"
+          :rules="categoryRules"
+          label="感情や気分"
+          required
+          outlined
+        ></v-text-field>
+      </v-form>
+      <div>
+        <v-form v-for="percent of percents" :key="percent.id">
+          <v-text-field
+            v-model.number="percent.value"
+            :key="percent.id"
+            :rules="percentRules"
+            label="数値"
+            required
+            outlined
+          ></v-text-field>
+        </v-form>
       </div>
     </div>
-  </ul>
+    <v-btn
+      @click="submitPosts"
+    >
+    送信
+    </v-btn>
+  </v-form>
 </div>
 </template>
 
@@ -33,17 +57,32 @@ import axios from 'axios';
 
 const URL_BASE = process.env.VUE_APP_ORIGIN
 const PERCENT_MAX = 100
-const PERCENT_MIN = 0
+const CATEGORY_SIZE = 0
 
 export default {
   data(){
     return {
-      errors: [],
+      valid: false,
       situation: '',
       percents: [{id: 0, value: ''}],
       percent: '',
       categorys: [{id: 0, value: ''}],
-      category: ''
+      category: '',
+      situationRules: [
+        v => !!v || "Environment is required",
+        v => v.length >= 2 || "Please write at least 2 characters"
+      ],
+      categoryRules: [
+        v => !!v || "Emotion or mood is required"
+      ],
+      percentRules: [
+        v => !!v || "Percent is required",
+        v => typeof v == "number" || "Please enter only numbers",
+        v => v >= 0 || "Invalid value",
+        v => v <= 100 || "You can enter up to 100percent at a time",
+      ],
+      errorMessages: [
+      ]
     }
   },
   methods: {
@@ -61,29 +100,17 @@ export default {
         this.categorys.pop()
       }
     },
-    checkForm(e) {
+    submitPosts() {
       let checkValue = 0
-      for (let checkPercent of this.percents) {
-        if(checkPercent.value && Number(checkPercent.value)) {
-          console.log(checkPercent.value)
-          checkValue = checkValue + Number(checkPercent.value)
-          this.submitPosts(checkValue)
-        }else{
-          this.errors.push('Please enter a number or Percent required.')
-          break
-        }
-      }
-      e.preventDefault();
-    },
-    submitPosts(checkValue) {
       const situationData = {situation: this.situation}
-      if (checkValue === PERCENT_MAX && this.categorys.length > PERCENT_MIN) {
-        // console.log(this.categorys.length)
+      for (let checkPercent of this.percents) {
+        checkValue = checkValue + Number(checkPercent.value)
+      }
+      if (checkValue === PERCENT_MAX && this.$refs.form.validate()){
         let percentValue = this.percents.map(function( percent ){
           return Number(percent.value)
         })
         let categoryValue = this.categorys.map(function( category ){
-          // console.log(category.value)
           return category.value
         })
         async function submitFunc() {
@@ -94,11 +121,12 @@ export default {
           await axios.post(URL_BASE + 'api/v1/emotion_labels', categoryData).then((_response)=>{console.log(_response)})
         }
         submitFunc()
-      } else {
-        this.errors.push('合計100%になるようにするか、カテゴリーを入力してください。')
-      }
+      }else{
+        this.errorMessages.pop()
+        this.errorMessages.push('The numerical value exceeds 100% or there is an unfilled item.')
       }
     }
+  }
 }
 </script>
 
