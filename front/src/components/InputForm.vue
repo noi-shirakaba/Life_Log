@@ -1,4 +1,6 @@
 <template>
+<v-app id="input-form-background">
+<h1>ログの入力</h1>
 <div class="center">
   <v-form ref="form" v-model="valid" lazy-validation>
     <p v-if="this.errorMessages">
@@ -6,13 +8,14 @@
         <li v-for="error in errorMessages" id="error">{{ error }}</li>
       </ul>
     </p>
+    <h2>環境</h2>
     <v-form>
       <v-text-field
         v-model="situation"
         type="text"
         :rules="situationRules"
         :counter="0"
-        label="環境"
+        label="自分にストレスを与えた原因や状態を書いてください"
         required
         outlined
       ></v-text-field>
@@ -20,23 +23,23 @@
     <div>
       <v-btn @click="addForm">追加</v-btn>
       <v-btn @click="deleteForm">削除</v-btn>
+      <h2>感情や気分</h2>
       <v-form v-for="category of categorys" :key="category.id">
         <v-text-field
           v-model="category.value"
           :key="category.id"
           :rules="categoryRules"
-          label="感情や気分"
           required
           outlined
         ></v-text-field>
       </v-form>
       <div>
+        <h2>数値</h2>
         <v-form v-for="percent of percents" :key="percent.id">
           <v-text-field
             v-model.number="percent.value"
             :key="percent.id"
             :rules="percentRules"
-            label="数値"
             required
             outlined
           ></v-text-field>
@@ -50,6 +53,7 @@
     </v-btn>
   </v-form>
 </div>
+</v-app>
 </template>
 
 <script>
@@ -131,6 +135,17 @@ export default {
 </script>
 
 <style scoped>
+h1 {
+  color: #7b7b7b;
+  text-align: center;
+}
+h2 {
+  color: #7b7b7b;
+  text-align: left;
+}
+ul {
+  list-style: none;
+}
 .center {
   text-align: center;
 }
@@ -139,6 +154,9 @@ export default {
 }
 .form-percent {
   background-color: aquamarine;
+}
+#input-form-background{
+  background-color: white;
 }
 #error {
   color: red;
