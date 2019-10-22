@@ -2,48 +2,44 @@
 <v-app id="input-form-background">
 <h1>ログの入力</h1>
 <div class="center">
+  <p v-if="this.errorMessages">
+    <ul>
+      <li v-for="error in errorMessages" id="error">{{ error }}</li>
+    </ul>
+  </p>
+  <h2>環境</h2>
   <v-form ref="form" v-model="valid" lazy-validation>
-    <p v-if="this.errorMessages">
-      <ul>
-        <li v-for="error in errorMessages" id="error">{{ error }}</li>
-      </ul>
-    </p>
-    <h2>環境</h2>
-    <v-form>
-      <v-text-field
-        v-model="situation"
-        type="text"
-        :rules="situationRules"
-        :counter="0"
-        label="自分にストレスを与えた原因や状態を書いてください"
-        required
-        outlined
-      ></v-text-field>
-    </v-form>
+    <v-text-field
+      v-model="situation"
+      type="text"
+      :rules="situationRules"
+      :counter="0"
+      label="自分にストレスを与えた原因や状態を書いてください"
+      required
+      outlined
+    ></v-text-field>
     <div>
       <v-btn @click="addForm">追加</v-btn>
       <v-btn @click="deleteForm">削除</v-btn>
       <h2>感情や気分</h2>
-      <v-form v-for="category of categorys" :key="category.id">
+      <v-text-field
+        v-for="category of categorys"
+        :key="category.id"
+        v-model="category.value"
+        :rules="categoryRules"
+        required
+        outlined
+      ></v-text-field>
+      <div>
+        <h2>数値</h2>
         <v-text-field
-          v-model="category.value"
-          :key="category.id"
-          :rules="categoryRules"
+          v-for="percent of percents"
+          :key="percent.id"
+          v-model.number="percent.value"
+          :rules="percentRules"
           required
           outlined
         ></v-text-field>
-      </v-form>
-      <div>
-        <h2>数値</h2>
-        <v-form v-for="percent of percents" :key="percent.id">
-          <v-text-field
-            v-model.number="percent.value"
-            :key="percent.id"
-            :rules="percentRules"
-            required
-            outlined
-          ></v-text-field>
-        </v-form>
       </div>
     </div>
     <v-btn
@@ -82,7 +78,7 @@ export default {
       percentRules: [
         v => !!v || "Percent is required",
         v => typeof v == "number" || "Please enter only numbers",
-        v => v >= 0 || "Invalid value",
+        v => v >= 10 || "Please enter a value greater than 10percent",
         v => v <= 100 || "You can enter up to 100percent at a time",
       ],
       errorMessages: [
@@ -110,24 +106,29 @@ export default {
       for (let checkPercent of this.percents) {
         checkValue = checkValue + Number(checkPercent.value)
       }
-      if (checkValue === PERCENT_MAX && this.$refs.form.validate()){
-        let percentValue = this.percents.map(function( percent ){
-          return Number(percent.value)
-        })
-        let categoryValue = this.categorys.map(function( category ){
-          return category.value
-        })
-        async function submitFunc() {
-          const percentData = {percent: percentValue}
-          const categoryData = {category: categoryValue}
-          await axios.post(URL_BASE + 'api/v1/environments', situationData).then((_response)=>{console.log(_response)})
-          await axios.post(URL_BASE + 'api/v1/emotions_emotion_labels', percentData).then((_response)=>{console.log(_response)})
-          await axios.post(URL_BASE + 'api/v1/emotion_labels', categoryData).then((_response)=>{console.log(_response)})
+      if (this.$refs.form.validate()) {
+        if (checkValue === PERCENT_MAX) {
+          let percentValue = this.percents.map(function( percent ){
+            return Number(percent.value)
+          })
+          let categoryValue = this.categorys.map(function( category ){
+            return category.value
+          })
+          async function submitFunc() {
+            const percentData = {percent: percentValue}
+            const categoryData = {category: categoryValue}
+            await axios.post(URL_BASE + 'api/v1/environments', situationData).then((_response)=>{console.log(_response)})
+            await axios.post(URL_BASE + 'api/v1/emotions_emotion_labels', percentData).then((_response)=>{console.log(_response)})
+            await axios.post(URL_BASE + 'api/v1/emotion_labels', categoryData).then((_response)=>{console.log(_response)})
+          }
+          submitFunc()
+        }else{
+          this.errorMessages.pop()
+          this.errorMessages.push('Please make sure the sum of the numbers is 100percent')
         }
-        submitFunc()
       }else{
         this.errorMessages.pop()
-        this.errorMessages.push('The numerical value exceeds 100% or there is an unfilled item.')
+        this.errorMessages.push('There are unfilled items or values ​​that are not valid.')
       }
     }
   }
