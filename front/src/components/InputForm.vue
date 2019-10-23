@@ -70,7 +70,7 @@ export default {
       category: '',
       situationRules: [
         v => !!v || "Environment is required",
-        v => v.length >= 2 || "Please write at least 2 characters"
+        v => v.length >= 3 || "Please write at least 2 characters"
       ],
       categoryRules: [
         v => !!v || "Emotion or mood is required"
