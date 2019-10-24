@@ -122,6 +122,7 @@ export default {
             await axios.post(URL_BASE + 'api/v1/emotion_labels', categoryData).then((_response)=>{console.log(_response)})
           }
           submitFunc()
+          this.errorMessages.pop()
         }else{
           this.errorMessages.pop()
           this.errorMessages.push('Please make sure the sum of the numbers is 100percent')
