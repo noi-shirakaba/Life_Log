@@ -100,36 +100,36 @@ export default {
         this.categorys.pop()
       }
     },
+    async submitFunc(situationValue, percentValue, categoryValue) {
+      const percentData = {percent: percentValue}
+      const categoryData = {category: categoryValue}
+      await axios.post(URL_BASE + 'api/v1/environments', situationValue).then((_response)=>{console.log(_response)})
+      await axios.post(URL_BASE + 'api/v1/emotions_emotion_labels', percentData).then((_response)=>{console.log(_response)})
+      await axios.post(URL_BASE + 'api/v1/emotion_labels', categoryData).then((_response)=>{console.log(_response)})
+    },
     submitPosts() {
       let checkValue = 0
       const situationData = {situation: this.situation}
       for (let checkPercent of this.percents) {
         checkValue = checkValue + Number(checkPercent.value)
       }
-      if (this.$refs.form.validate()) {
-        if (checkValue === PERCENT_MAX) {
+      if (!this.$refs.form.validate()) {
+        this.errorMessages.pop()
+        this.errorMessages.push('There are unfilled items or values ​​that are not valid.')
+      }else{
+        if (!checkValue === PERCENT_MAX) {
+          this.errorMessages.pop()
+          this.errorMessages.push('Please make sure the sum of the numbers is 100percent')
+        }else{
           let percentValue = this.percents.map(function( percent ){
             return Number(percent.value)
           })
           let categoryValue = this.categorys.map(function( category ){
             return category.value
           })
-          async function submitFunc() {
-            const percentData = {percent: percentValue}
-            const categoryData = {category: categoryValue}
-            await axios.post(URL_BASE + 'api/v1/environments', situationData).then((_response)=>{console.log(_response)})
-            await axios.post(URL_BASE + 'api/v1/emotions_emotion_labels', percentData).then((_response)=>{console.log(_response)})
-            await axios.post(URL_BASE + 'api/v1/emotion_labels', categoryData).then((_response)=>{console.log(_response)})
-          }
-          submitFunc()
+          this.submitFunc(situationData, percentValue, categoryValue)
           this.errorMessages.pop()
-        }else{
-          this.errorMessages.pop()
-          this.errorMessages.push('Please make sure the sum of the numbers is 100percent')
         }
-      }else{
-        this.errorMessages.pop()
-        this.errorMessages.push('There are unfilled items or values ​​that are not valid.')
       }
     }
   }
