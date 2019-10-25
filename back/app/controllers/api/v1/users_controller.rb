@@ -1,6 +1,5 @@
 module Api::V1
   class UsersController < ApplicationController
-    protect_from_forgery :except => [:login]
     skip_before_action :authenticate!, only: [:create, :login]
     
     def create
