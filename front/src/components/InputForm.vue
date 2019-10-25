@@ -113,14 +113,8 @@ export default {
       for (let checkPercent of this.percents) {
         checkValue = checkValue + Number(checkPercent.value)
       }
-      if (!this.$refs.form.validate()) {
-        this.errorMessages.pop()
-        this.errorMessages.push('There are unfilled items or values ​​that are not valid.')
-      }else{
-        if (!checkValue === PERCENT_MAX) {
-          this.errorMessages.pop()
-          this.errorMessages.push('Please make sure the sum of the numbers is 100percent')
-        }else{
+      if (this.$refs.form.validate()) {
+        if (checkValue === PERCENT_MAX) {
           let percentValue = this.percents.map(function( percent ){
             return Number(percent.value)
           })
@@ -129,7 +123,13 @@ export default {
           })
           this.submitFunc(situationData, percentValue, categoryValue)
           this.errorMessages.pop()
+        }else{
+          this.errorMessages.pop()
+          this.errorMessages.push('Please make sure the sum of the numbers is 100percent')
         }
+      }else{
+        this.errorMessages.pop()
+        this.errorMessages.push('There are unfilled items or values ​​that are not valid.')
       }
     }
   }
