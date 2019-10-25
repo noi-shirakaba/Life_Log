@@ -1,7 +1,6 @@
 module Api::V1
 	class EmotionLabelsController < ApplicationController
 		skip_before_action :authenticate!, only: [:index, :create, :update, :destroy]
-		protect_from_forgery :except => [:create]
 
 		def create
 			EmotionLabel.transaction do
