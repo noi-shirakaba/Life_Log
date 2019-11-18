@@ -1,54 +1,117 @@
 <template>
 <v-app id="input-form-background">
-<h1>ログの入力</h1>
-<div class="center">
-  <p v-if="this.errorMessages">
-    <ul>
-      <li v-for="error in errorMessages" id="error">{{ error }}</li>
-    </ul>
-  </p>
-  <h2>環境</h2>
-  <v-form ref="form" v-model="valid" lazy-validation>
-    <v-text-field
-      v-model="situation"
-      type="text"
-      :rules="situationRules"
-      :counter="0"
-      label="自分にストレスを与えた原因や状態を書いてください"
-      required
-      outlined
-    ></v-text-field>
-    <div>
-      <v-btn @click="addForm">追加</v-btn>
-      <v-btn @click="deleteForm">削除</v-btn>
-      <h2>感情や気分</h2>
-      <v-text-field
-        v-for="category of categorys"
-        :key="category.id"
-        v-model="category.value"
-        :rules="categoryRules"
-        required
-        outlined
-      ></v-text-field>
-      <div>
-        <h2>数値</h2>
-        <v-text-field
-          v-for="percent of percents"
-          :key="percent.id"
-          v-model.number="percent.value"
-          :rules="percentRules"
-          required
-          outlined
-        ></v-text-field>
-      </div>
-    </div>
-    <v-btn
-      @click="submitPosts"
-    >
-    送信
-    </v-btn>
-  </v-form>
-</div>
+<h1 class="input-title">ログの入力</h1>
+<p v-if="this.errorMessages" class="text-center pt-3">
+  <ul>
+    <li v-for="error in errorMessages" id="error">{{ error }}</li>
+  </ul>
+</p>
+<v-container>
+    <h2>環境</h2>
+      <v-form ref="form" v-model="valid" lazy-validation>
+        <v-row>
+          <v-col>
+            <v-text-field
+              v-model="situation"
+              type="text"
+              :rules="situationRules"
+              :counter="0"
+              label="自分にストレスを与えた原因や状態を書いてください"
+              required
+              outlined
+            ></v-text-field>
+          </v-col>
+        </v-row>
+        <hr class="title-line">
+        <h1 class="reaction-title">ストレスの反応</h1>
+        <h2>思考やイメージ</h2>
+        <v-row>
+          <v-col md="10" sm="8" cols="12">
+            <v-text-field
+              type="text"
+              label="ストレスを感じた時の思考や浮かんだ言葉などを書いてください"
+              required
+              outlined
+            ></v-text-field>
+          </v-col>
+          <v-col md="2" sm="4">
+            <v-btn fab class="add-button mr-4"><v-icon dark>mdi-plus</v-icon></v-btn>
+            <v-btn fab class="delete-button"><v-icon dark>mdi-minus</v-icon></v-btn>
+          </v-col>
+        </v-row>
+        <h2>感情や気分</h2>
+        <v-row>
+          <v-col md="8" sm="6" cols="12">
+            <v-text-field
+            　label="ストレスを感じた時の感情や気分を書いてください"
+              v-for="category of categorys"
+              :key="category.id"
+              v-model="category.value"
+              :rules="categoryRules"
+              required
+              outlined
+            ></v-text-field>
+          </v-col>
+          <v-col md="2" sm="2" cols="12">
+            <v-text-field
+              label="数値を入力してください"
+              v-for="percent of percents"
+              :key="percent.id"
+              v-model.number="percent.value"
+              :rules="percentRules"
+              required
+              outlined
+            ></v-text-field>
+          </v-col>
+          <v-col md="2" sm="4">
+            <v-btn @click="addForm" fab class="add-button mr-4"><v-icon dark>mdi-plus</v-icon></v-btn>
+            <v-btn @click="deleteForm" fab class="delete-button"><v-icon dark>mdi-minus</v-icon></v-btn>
+          </v-col>
+        </v-row>
+        <h2>身体の反応</h2>
+        <v-row>
+          <v-col md="10" sm="8" cols="12">
+            <v-text-field
+              type="text"
+              label="ストレスを感じた時の身体の反応を書いてください"
+              required
+              outlined
+            ></v-text-field>
+          </v-col>
+          <v-col md="2" sm="4">
+            <v-btn fab class="add-button mr-4"><v-icon dark>mdi-plus</v-icon></v-btn>
+            <v-btn fab class="delete-button"><v-icon dark>mdi-minus</v-icon></v-btn>
+          </v-col>
+        </v-row>
+        <h2>行動</h2>
+        <v-row>
+          <v-col md="10" sm="8" cols="12">
+            <v-text-field
+              type="text"
+              label="ストレスが起きた時どんな行動を行ったかを書いてください"
+              required
+              outlined
+            ></v-text-field>
+          </v-col>
+          <v-col md="2" sm="4">
+            <v-btn fab class="add-button mr-4"><v-icon dark>mdi-plus</v-icon></v-btn>
+            <v-btn fab class="delete-button"><v-icon dark>mdi-minus</v-icon></v-btn>
+          </v-col>
+        </v-row>
+        <v-row justify="center">
+          <v-btn
+            class="submit-button"
+            rounded
+            @click="submitPosts"
+          >
+          保存
+          </v-btn>
+        </v-row>
+      </v-form>
+      <v-row justify="center" class="mt-4">
+        <v-btn class="back-button ma-auto" rounded><a @click="$router.go(-1)">戻る</a></v-btn>
+      </v-row>
+</v-container>
 </v-app>
 </template>
 
@@ -137,16 +200,33 @@ export default {
 </script>
 
 <style scoped>
+#input-form-background{
+  background-color: white;
+}
+#error {
+  color: red;
+}
 h1 {
-  color: #7b7b7b;
+  color: var(--maincolor);
   text-align: center;
 }
 h2 {
-  color: #7b7b7b;
+  color: var(--maincolor);
   text-align: left;
 }
 ul {
   list-style: none;
+}
+.title-line {
+  border-top: 3px solid var(--maincolor);
+  margin-top: 40px;
+  margin-bottom: 40px;
+}
+.input-title{
+  margin-top: 40px;
+}
+.reaction-title {
+  margin-bottom: 47px;
 }
 .center {
   text-align: center;
@@ -157,10 +237,18 @@ ul {
 .form-percent {
   background-color: aquamarine;
 }
-#input-form-background{
-  background-color: white;
+.add-button {
+  color: var(--maincolor);
 }
-#error {
-  color: red;
+.delete-button {
+  color: var(--maincolor);
+}
+.submit-button {
+  color: var(--maincolor);
+  width: 250px;
+}
+.back-button a {
+  text-decoration: none;
+  color: var(--maincolor);
 }
 </style>

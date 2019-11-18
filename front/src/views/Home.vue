@@ -1,17 +1,17 @@
 <template>
 <v-app id="home-background">
-	<HomeLink />
-	<InputForm />
+	<HomeLink/>
+	<HomeButton />
 </v-app>
 </template>
 
 <script>
 import HomeLink from '@/components/Link.vue'
-import InputForm from '@/components/InputForm.vue'
+import HomeButton from '@/components/HomeButton.vue'
 export default {
 	components: {
 		HomeLink,
-		InputForm
+		HomeButton
 	}
 }
 </script>
