@@ -8,11 +8,12 @@
 <script>
 import HomeLink from '@/components/Link.vue'
 import HomeButton from '@/components/HomeButton.vue'
+
 export default {
 	components: {
 		HomeLink,
 		HomeButton
-	}
+	},
 }
 </script>
 

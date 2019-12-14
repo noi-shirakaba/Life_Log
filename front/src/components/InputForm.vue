@@ -3,7 +3,7 @@
 <h1 class="input-title">ログの入力</h1>
 <p v-if="this.errorMessages" class="text-center pt-3">
   <ul>
-    <li v-for="error in errorMessages" id="error">{{ error }}</li>
+    <li v-for="error in errorMessages" id="error" :key="error">{{ error }}</li>
   </ul>
 </p>
 <v-container>

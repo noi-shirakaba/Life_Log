@@ -8,6 +8,7 @@
 
 <script>
 import axios from 'axios';
+import { mapGetters } from 'vuex'
 
 const URL_BASE = process.env.VUE_APP_ORIGIN
 
@@ -18,9 +19,18 @@ export default {
     }
   },
   mounted() {
-    axios.get(URL_BASE + 'api/v1/environments.json')
+    axios.get(URL_BASE + 'api/v1/environments.json', {
+  		headers: {
+    		Authorization: `Bearer ${this.getToken}`,
+  		}
+		})
     .then(response => (this.environments = response.data))
-  }
+  },
+	computed: {
+    ...mapGetters('auth', [
+      'getToken',
+    ])
+	},
 }
 </script>
 

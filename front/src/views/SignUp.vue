@@ -42,36 +42,28 @@ export default {
   methods: {
     submitted(e) {
       // 送信するデータを作る
-      const data = new FormData(e.target);
+      const data = new FormData(e.target)
       const obj = {
         user: {
           name: data.get("name"),
           email: data.get("email"),
           password: data.get("password")
         }
-      };
-      //API option
+      }
       const config = {
         withCredentials: true,
       };
-      // 送信する
-      axios
-        .post(URL_BASE + '/api/v1/users', obj, config)
-        .then(response => {    
-          // ログインに成功した
-          const data = response.data;
-          // 画面移動
-          this.$router.replace(this.$route.query.redirect || '/home')
-          // LocalStorage に トークンを保存する
-          localStorage.token = data.token;
-        },
-          error => {
-          // ログインに失敗した
-          this.alert = true;
-          window.setTimeout(() => {
-              this.alert = false;
-            }, 1800);
-        });
+      axios.post(URL_BASE + '/api/v1/users', obj, config)
+      .then(response => {
+        const data = response.data;
+        this.$router.replace('/login')
+      })
+      .catch(error => {
+        this.alert = true;
+        window.setTimeout(() => {
+          this.alert = false;
+        }, 1800);
+      })
     },
   },
 }
