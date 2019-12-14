@@ -1,13 +1,13 @@
 module Api::V1
   class EnvironmentsController < ApplicationController
-    skip_before_action :authenticate!, only: [:index, :create, :show, :update, :destroy]
+
     def index
-      @environment = Environment.all
+      @environment = @user.environments.all
       render :json => @environment
     end
 
     def create
-      @environment = Environment.new(environment_params)
+      @environment = @user.environments.new(environment_params)
       if @environment.save
         response_success(:environment, :create)
       else
@@ -16,18 +16,18 @@ module Api::V1
     end
 
     def show
-      @environment = Environment.find(params[:id])
+      @environment = @user.environments.find(params[:id])
       render :json => @environment
     end
 
     def update
-      @environment = Environment.find(params[:id])
+      @environment = @user.environments.find(params[:id])
       @environment.update(environment_params)
       render :json => @environment
     end
 
     def destroy
-      @environment = Environment.find(params[:id])
+      @environment = @user.environments.find(params[:id])
       @environment.destroy
       render :json => @environment
     end

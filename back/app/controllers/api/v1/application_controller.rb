@@ -1,6 +1,5 @@
 module Api::V1
 	class ApplicationController < ActionController::API
-
 		include ActionController::HttpAuthentication::Token::ControllerMethods
 
 				# 200 Success
@@ -35,16 +34,19 @@ module Api::V1
 
 		before_action :authenticate!
 		private
-		def authenticate!
-			authenticate_or_request_with_http_token do |token, options|
-			  User.find_by(token: token).present?
-			end
-		end
+    def authenticate!
+      authenticate_or_request_with_http_token do |token, options|
+        @user = User.find_by(token: token)
+        !!@user || render_unauthorized
+      end
+    end
+
+    def render_unauthorized
+      render json: { message: 'token invalid' }, status: :unauthorized
+    end
 		
     def current_user
-			@current_user ||= User.find_by(token: request.headers['Authorization'].split[1])
+			@user
 		end
-
-
 	end
 end

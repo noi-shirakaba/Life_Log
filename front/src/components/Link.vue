@@ -7,7 +7,7 @@
 			</v-col>
 			<v-col xl="6" lg="6" md="6" sm="6">
 				<div class="d-md-flex justify-md-space-around d-sm-flex justify-sm-space-around d-flex justify-space-around" xs12>
-					<router-link to="#" class="caption">アカウント</router-link>
+					<router-link to="#" class="caption">{{ getName }}</router-link>
 					<router-link to="#" class="caption">ヘルプ</router-link>
 					<router-link to="#" class="caption">ログアウト</router-link>
 				</div>
@@ -18,8 +18,14 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
-	
+  computed: {
+    ...mapGetters('auth', [
+      'getName',
+    ])
+  },
 }
 </script>
 

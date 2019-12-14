@@ -6,5 +6,18 @@ class User < ApplicationRecord
   
   has_many :environments
   has_secure_password
-  has_secure_token
+  
+  before_create :ensure_token
+
+  private
+  
+  def ensure_token
+    if self.token.blank?
+      self.token =
+        loop do
+          t = SecureRandom.uuid
+          break t unless User.where(:token => t).first
+        end
+    end
+  end
 end
