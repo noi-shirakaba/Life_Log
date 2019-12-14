@@ -117,12 +117,18 @@
 
 <script>
 import axios from 'axios';
+import { mapGetters } from 'vuex'
 
 const URL_BASE = process.env.VUE_APP_ORIGIN
 const PERCENT_MAX = 100
 const CATEGORY_SIZE = 0
 
 export default {
+	computed: {
+    ...mapGetters('auth', [
+      'getToken',
+    ])
+	},
   data(){
     return {
       valid: false,
@@ -158,7 +164,7 @@ export default {
       this.categorys.push({id: lastCategoryIndex, value: ''})
     },
     deleteForm(){
-     if (this.percents.length > 1 || this.categorys.length > 1 ) {
+      if (this.percents.length > 1 || this.categorys.length > 1 ) {
         this.percents.pop()
         this.categorys.pop()
       }
@@ -166,9 +172,15 @@ export default {
     async submitFunc(situationValue, percentValue, categoryValue) {
       const percentData = {percent: percentValue}
       const categoryData = {category: categoryValue}
-      await axios.post(URL_BASE + 'api/v1/environments', situationValue).then((_response)=>{console.log(_response)})
-      await axios.post(URL_BASE + 'api/v1/emotions_emotion_labels', percentData).then((_response)=>{console.log(_response)})
-      await axios.post(URL_BASE + 'api/v1/emotion_labels', categoryData).then((_response)=>{console.log(_response)})
+      const config = {
+        headers: {
+          Authorization: `Bearer ${this.getToken}`,
+        }
+      }
+
+      await axios.post(URL_BASE + 'api/v1/environments', situationValue, config).then((_response)=>{console.log(_response)})
+      await axios.post(URL_BASE + 'api/v1/emotions_emotion_labels', percentData, config).then((_response)=>{console.log(_response)})
+      await axios.post(URL_BASE + 'api/v1/emotion_labels', categoryData, config).then((_response)=>{console.log(_response)})
     },
     submitPosts() {
       let checkValue = 0
