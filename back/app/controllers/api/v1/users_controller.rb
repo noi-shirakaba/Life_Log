@@ -12,7 +12,7 @@ module Api::V1
       if @user.save
         check_login(@user)
       else
-        response_bad_request
+        render status: 202, json: { status: 202, message: 'Validation error', errors: @user.errors }
       end
     end
 

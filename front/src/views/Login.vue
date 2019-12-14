@@ -13,7 +13,16 @@
         ログイン
       </v-btn>
       <v-alert
-        :value="alert"        
+        :value="info"
+        type="info"
+        border="bottom"
+        dismissible
+        transition="scale-transition"
+      >
+        ユーザーを作成しました。ログインしてください。
+      </v-alert>
+      <v-alert
+        :value="alert"
         type="error"
         border="bottom"
         dismissible
@@ -34,11 +43,23 @@ import { mapActions } from 'vuex'
 
 const URL_BASE = process.env.VUE_APP_ORIGIN;
 export default {
+  props: {
+    new: String,
+  },
   data() {
     return {
       alert: false,
+      info: false,
       email: '',
       password: ''
+    }
+  },
+  mounted() {
+    if (this.new === 'new') {
+      this.info = true;
+      window.setTimeout(() => {
+        this.info = false;
+      }, 1800);
     }
   },
   methods: {
