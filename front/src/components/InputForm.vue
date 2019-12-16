@@ -117,12 +117,18 @@
 
 <script>
 import axios from 'axios';
+import { mapGetters } from 'vuex'
 
 const URL_BASE = process.env.VUE_APP_ORIGIN
 const PERCENT_MAX = 100
 const CATEGORY_SIZE = 0
 
 export default {
+  computed: {
+    ...mapGetters('auth', [
+      'getToken',
+    ])
+  },
   data(){
     return {
       valid: false,
@@ -164,11 +170,12 @@ export default {
       }
     },
     async submitFunc(situationValue, percentValue, categoryValue) {
-      const percentData = {percent: percentValue}
-      const categoryData = {category: categoryValue}
-      await axios.post(URL_BASE + 'api/v1/environments', situationValue).then((_response)=>{console.log(_response)})
-      await axios.post(URL_BASE + 'api/v1/emotions_emotion_labels', percentData).then((_response)=>{console.log(_response)})
-      await axios.post(URL_BASE + 'api/v1/emotion_labels', categoryData).then((_response)=>{console.log(_response)})
+      const config = {headers: {Authorization: `Bearer ${this.getToken}`,}}
+      await axios.post(URL_BASE + 'api/v1/environments', situationValue, config).then(_response =>(this.envID = _response.data.id))
+      const categoryData = {id: Number(this.envID), category: categoryValue}
+      await axios.post(URL_BASE + 'api/v1/emotion_labels', categoryData, config).then(_response =>(this.emoID = _response.data))
+      const percentData = {emotion_id: Number(this.emoID.emotion.id), emotion_label_id: this.emoID.emotion_label.map(Number), percent: percentValue}
+      await axios.post(URL_BASE + 'api/v1/emotions_emotion_labels', percentData, config).then((_response)=>{console.log(_response)})
     },
     submitPosts() {
       let checkValue = 0
