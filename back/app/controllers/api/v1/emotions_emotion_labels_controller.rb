@@ -1,11 +1,9 @@
 module Api::V1
 	class EmotionsEmotionLabelsController < ApplicationController
-		skip_before_action :authenticate!, only: [:index, :create, :update, :destroy]
-
 		def create
 			EmotionsEmotionLabel.transaction do
-				emotions_percent_params["percent"].each do |emotion_percent|
-					@emotion_percent = EmotionsEmotionLabel.new(percent: emotion_percent)
+				emotions_labels_params["emotion_label_id"].zip(emotions_labels_params["percent"]) do |label_id, emotion_percent|
+					@emotion_percent = EmotionsEmotionLabel.new(emotion_id: emotions_labels_params["emotion_id"], emotion_label_id: label_id, percent: emotion_percent)
 					@emotion_percent.save!
 				end
 			end
@@ -14,8 +12,8 @@ module Api::V1
 				response_bad_request
 		end
 
-		def emotions_percent_params
-			params.require(:emotions_emotion_label).permit(percent: [])
+		def emotions_labels_params
+			params.require(:emotions_emotion_label).permit(:emotion_id, emotion_label_id: [], percent: [])
 		end
 	end
 end
