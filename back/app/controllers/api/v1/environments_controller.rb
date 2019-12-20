@@ -9,7 +9,7 @@ module Api::V1
     def create
       @environment = @user.environments.new(environment_params)
       if @environment.save
-        response_success(:environment, :create)
+        render :json => @environment
       else
         response_bad_request
       end
@@ -33,7 +33,6 @@ module Api::V1
     end
     
     def environment_params
-      # binding.pry
       params.require(:environment).permit(:situation)
     end
   end
