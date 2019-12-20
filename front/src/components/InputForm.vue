@@ -164,7 +164,7 @@ export default {
       this.categorys.push({id: lastCategoryIndex, value: ''})
     },
     deleteForm(){
-     if (this.percents.length > 1 || this.categorys.length > 1 ) {
+      if (this.percents.length > 1 || this.categorys.length > 1 ) {
         this.percents.pop()
         this.categorys.pop()
       }
