@@ -9,6 +9,21 @@ class User < ApplicationRecord
   
   before_create :ensure_token
 
+  def gwt_token
+    payload = { token: token }
+    hmac_secret = Rails.application.credentials.secret_key_base
+    # payloadを、hmac_secret(秘密鍵)でHS256アルゴリズムで署名する
+    token = JWT.encode(payload, hmac_secret, 'HS256', { typ: 'JWT' })
+  end
+
+  def self.auth_gwt_token(token)
+    hmac_secret = Rails.application.credentials.secret_key_base
+    decoded_token = JWT.decode(token, hmac_secret, true, { algorithm: 'HS256' })
+    self.find_by(token: decoded_token[0]["token"])
+  rescue JWT::VerificationError
+    nil
+  end
+
   private
   
   def ensure_token

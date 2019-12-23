@@ -24,7 +24,7 @@ module Api::V1
     private 
       def check_login(user)
         if user && user.authenticate(params[:user][:password])
-          render status: 200, json: { status: 200, name: user.name, token: user.token, message: "Success User #{action_name.capitalize}" }
+          render status: 200, json: { status: 200, name: user.name, token: user.gwt_token, message: "Success User #{action_name.capitalize}" }
         else
           response_unauthorized
         end

@@ -36,7 +36,7 @@ module Api::V1
 		private
     def authenticate!
       authenticate_or_request_with_http_token do |token, options|
-        @user = User.find_by(token: token)
+        @user = User.auth_gwt_token(token)
         !!@user || render_unauthorized
       end
     end
