@@ -33,9 +33,10 @@ const router = new Router({
       }
     },
     { 
-      path: '/login',
+      path: '/login/:new?',
       name: 'Login',
       component: Login,
+      props: true,
       meta: {
         isPublic: true
       }
