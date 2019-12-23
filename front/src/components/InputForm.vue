@@ -28,15 +28,20 @@
         <v-row>
           <v-col md="10" sm="8" cols="12">
             <v-text-field
-              type="text"
               label="ストレスを感じた時の思考や浮かんだ言葉などを書いてください"
+              :counter="0"
+              v-for="thought of thoughts"
+              :key="thought.id"
+              v-model="thought.value"
+              type="text"
+              :rules="thoughtRules"
               required
               outlined
             ></v-text-field>
           </v-col>
           <v-col md="2" sm="4">
-            <v-btn fab class="add-button mr-4"><v-icon dark>mdi-plus</v-icon></v-btn>
-            <v-btn fab class="delete-button"><v-icon dark>mdi-minus</v-icon></v-btn>
+            <v-btn @click="addThoughtForm" fab class="add-button mr-4"><v-icon dark>mdi-plus</v-icon></v-btn>
+            <v-btn @click="deleteThoughtForm" fab class="delete-button"><v-icon dark>mdi-minus</v-icon></v-btn>
           </v-col>
         </v-row>
         <h2>感情や気分</h2>
@@ -64,8 +69,8 @@
             ></v-text-field>
           </v-col>
           <v-col md="2" sm="4">
-            <v-btn @click="addForm" fab class="add-button mr-4"><v-icon dark>mdi-plus</v-icon></v-btn>
-            <v-btn @click="deleteForm" fab class="delete-button"><v-icon dark>mdi-minus</v-icon></v-btn>
+            <v-btn @click="addEmotionForm" fab class="add-button mr-4"><v-icon dark>mdi-plus</v-icon></v-btn>
+            <v-btn @click="deleteEmotionForm" fab class="delete-button"><v-icon dark>mdi-minus</v-icon></v-btn>
           </v-col>
         </v-row>
         <h2>身体の反応</h2>
@@ -133,12 +138,19 @@ export default {
     return {
       valid: false,
       situation: '',
+      envID: '',
+      thoughts: [{id: 0, value: ''}],
+      thought: '',
       percents: [{id: 0, value: ''}],
       percent: '',
       categorys: [{id: 0, value: ''}],
       category: '',
       situationRules: [
         v => !!v || "Environment is required",
+        v => v.length >= 3 || "Please write at least 3 characters"
+      ],
+      thoughtRules: [
+        v => !!v || "Thoughts is required",
         v => v.length >= 3 || "Please write at least 3 characters"
       ],
       categoryRules: [
@@ -155,7 +167,7 @@ export default {
     }
   },
   methods: {
-    addForm(){
+    addEmotionForm(){
       let lastIndex = this.percents.slice(-1)[0].id
       let lastCategoryIndex = this.categorys.slice(-1)[0].id
       lastIndex += 1
@@ -163,19 +175,31 @@ export default {
       this.percents.push({id: lastIndex, value: ""})
       this.categorys.push({id: lastCategoryIndex, value: ''})
     },
-    deleteForm(){
+    addThoughtForm(){
+      let lastThoughtIndex = this.thoughts.slice(-1)[0].id
+      lastThoughtIndex += 1
+      this.thoughts.push({id: lastThoughtIndex, value: ""})
+    },
+    deleteThoughtForm(){
+     if (this.thoughts.length > 1) {
+        this.thoughts.pop()
+      }
+    },
+    deleteEmotionForm(){
      if (this.percents.length > 1 || this.categorys.length > 1 ) {
         this.percents.pop()
         this.categorys.pop()
       }
     },
-    async submitFunc(situationValue, percentValue, categoryValue) {
+    async submitFunc(situationValue, thoughtValue, percentValue, categoryValue) {
       const config = {headers: {Authorization: `Bearer ${this.getToken}`,}}
       await axios.post(URL_BASE + 'api/v1/environments', situationValue, config).then(_response =>(this.envID = _response.data.id))
       const categoryData = {id: Number(this.envID), category: categoryValue}
       await axios.post(URL_BASE + 'api/v1/emotion_labels', categoryData, config).then(_response =>(this.emoID = _response.data))
       const percentData = {emotion_id: Number(this.emoID.emotion.id), emotion_label_id: this.emoID.emotion_label.map(Number), percent: percentValue}
       await axios.post(URL_BASE + 'api/v1/emotions_emotion_labels', percentData, config).then((_response)=>{console.log(_response)})
+      const thoughtData = {id: Number(this.envID), thought_content: thoughtValue}
+      await axios.post(URL_BASE + 'api/v1/thoughts', thoughtData, config).then((_response)=>{console.log(_response)})
     },
     submitPosts() {
       let checkValue = 0
@@ -184,6 +208,9 @@ export default {
         checkValue = checkValue + Number(checkPercent.value)
       }
       if (this.$refs.form.validate()) {
+        let thoughtValue = this.thoughts.map(function( thought ){
+          return thought.value
+        })
         if (checkValue === PERCENT_MAX) {
           let percentValue = this.percents.map(function( percent ){
             return Number(percent.value)
@@ -191,7 +218,7 @@ export default {
           let categoryValue = this.categorys.map(function( category ){
             return category.value
           })
-          this.submitFunc(situationData, percentValue, categoryValue)
+          this.submitFunc(situationData, thoughtValue, percentValue, categoryValue)
           this.errorMessages.pop()
         }else{
           this.errorMessages.pop()
