@@ -181,12 +181,12 @@ export default {
       this.thoughts.push({id: lastThoughtIndex, value: ""})
     },
     deleteThoughtForm(){
-     if (this.thoughts.length > 1) {
+      if (this.thoughts.length > 1) {
         this.thoughts.pop()
       }
     },
     deleteEmotionForm(){
-     if (this.percents.length > 1 || this.categorys.length > 1 ) {
+      if (this.percents.length > 1 || this.categorys.length > 1 ) {
         this.percents.pop()
         this.categorys.pop()
       }
