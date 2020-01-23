@@ -9,7 +9,7 @@
 				<div class="d-md-flex justify-md-space-around d-sm-flex justify-sm-space-around d-flex justify-space-around" xs12>
 					<router-link to="#" class="caption">{{ getName }}</router-link>
 					<router-link to="#" class="caption">ヘルプ</router-link>
-					<router-link to="#" class="caption">ログアウト</router-link>
+					<router-link to="/logout" class="caption">ログアウト</router-link>
 				</div>
 			</v-col>
 		</v-row>

@@ -34,6 +34,14 @@ export default {
   },
 
   actions: {
+    logout({ commit }, payload) {
+      return new Promise(() => {
+        commit('logout')
+        commit('setToken', { token: null })
+        commit('setName', { name: null })
+      })
+    },
+
     login({ commit }, payload) {
       return axios.post(URL_BASE + 'api/v1/users/login', {
         user: {
