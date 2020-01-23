@@ -16,6 +16,10 @@ module Api::V1
       end
     end
 
+    def destroy
+      log_out
+      redirect_to root_url
+    end
     def login
       @user = User.find_by(email: params[:user][:email])
       check_login(@user)

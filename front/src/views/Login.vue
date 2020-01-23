@@ -19,7 +19,7 @@
         dismissible
         transition="scale-transition"
       >
-        ユーザーを作成しました。ログインしてください。
+        {{ message }}
       </v-alert>
       <v-alert
         :value="alert"
@@ -41,21 +41,28 @@
 <script>
 import { mapActions } from 'vuex'
 
-const URL_BASE = process.env.VUE_APP_ORIGIN;
 export default {
   props: {
-    new: String,
+    param: String,
   },
   data() {
     return {
       alert: false,
       info: false,
       email: '',
-      password: ''
+      password: '',
+      message: '',
     }
   },
   mounted() {
-    if (this.new === 'new') {
+    if (this.param === 'new') {
+      this.message = "ユーザーを作成しました。ログインしてください。"
+      this.info = true;
+      window.setTimeout(() => {
+        this.info = false;
+      }, 1800);
+    } else if (this.param === 'out') {
+      this.message = "ログアウトしました。"
       this.info = true;
       window.setTimeout(() => {
         this.info = false;

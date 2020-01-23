@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Top from '@/views/Top.vue'
 import Login from '@/views/Login.vue'
+import Logout from '@/views/Logout.vue'
 import SignUp from '@/views/SignUp.vue'
 import Home from '@/views/Home.vue'
 import Form  from '@/views/LogForm.vue'
@@ -33,12 +34,20 @@ const router = new Router({
       }
     },
     { 
-      path: '/login/:new?',
+      path: '/login/:param?',
       name: 'Login',
       component: Login,
       props: true,
       meta: {
         isPublic: true
+      }
+    },
+    { 
+      path: '/logout',
+      name: 'Logout',
+      component: Logout,
+      meta: {
+        isPublic: false
       }
     },
     {
