@@ -13,7 +13,6 @@ module Api::V1
     end
 
     def reaction_params
-      # params.require(:action).permit(:id, action_category: [])
       params.permit(:id, content: [])
     end
   end
