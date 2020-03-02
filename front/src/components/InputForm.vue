@@ -77,15 +77,20 @@
         <v-row>
           <v-col md="10" sm="8" cols="12">
             <v-text-field
-              type="text"
               label="ストレスを感じた時の身体の反応を書いてください"
+              :counter="0"
+              v-for="reaction of reactions"
+              :key="reaction.id"
+              v-model="reaction.value"
+              :rules="reactionRules"
+              type="text"
               required
               outlined
             ></v-text-field>
           </v-col>
           <v-col md="2" sm="4">
-            <v-btn fab class="add-button mr-4"><v-icon dark>mdi-plus</v-icon></v-btn>
-            <v-btn fab class="delete-button"><v-icon dark>mdi-minus</v-icon></v-btn>
+            <v-btn @click="addReactionForm" fab class="add-button mr-4"><v-icon dark>mdi-plus</v-icon></v-btn>
+            <v-btn @click="deleteReactionForm" fab class="delete-button"><v-icon dark>mdi-minus</v-icon></v-btn>
           </v-col>
         </v-row>
         <h2>行動</h2>
@@ -152,6 +157,8 @@ export default {
       category: '',
       actions: [{id: 0, value: ''}],
       action: '',
+      reactions: [{id: 0, value: ''}],
+      reaction: '',
       situationRules: [
         v => !!v || "Environment is required",
         v => v.length >= 3 || "Please write at least 3 characters"
@@ -170,7 +177,11 @@ export default {
         v => v <= 100 || "You can enter up to 100percent at a time",
       ],
       actionRules: [
-        v => !!v || "Thoughts is required",
+        v => !!v || "Actions is required",
+        v => v.length >= 3 || "Please write at least 3 characters"
+      ],
+      reactionRules: [
+        v => !!v || "Reactions is required",
         v => v.length >= 3 || "Please write at least 3 characters"
       ],
       errorMessages: [
@@ -196,6 +207,11 @@ export default {
       lastActionIndex += 1
       this.actions.push({id: lastActionIndex, value: ""})
     },
+    addReactionForm(){
+      let lastReactionIndex = this.reactions.slice(-1)[0].id
+      lastReactionIndex += 1
+      this.reactions.push({id: lastReactionIndex, value: ""})
+    },
     deleteThoughtForm(){
       if (this.thoughts.length > 1) {
         this.thoughts.pop()
@@ -212,7 +228,12 @@ export default {
         this.actions.pop()
       }
     },
-    async submitFunc(situationValue, thoughtValue, percentValue, categoryValue, actionValue) {
+    deleteReactionForm(){
+     if (this.reactions.length > 1) {
+        this.reactions.pop()
+      }
+    },
+    async submitFunc(situationValue, thoughtValue, percentValue, categoryValue, actionValue, reactionValue) {
       const config = {headers: {Authorization: `Bearer ${this.getToken}`,}}
       await axios.post(URL_BASE + 'api/v1/environments', situationValue, config).then(_response =>(this.envID = _response.data.id))
       const categoryData = {id: Number(this.envID), category: categoryValue}
@@ -223,6 +244,8 @@ export default {
       await axios.post(URL_BASE + 'api/v1/thoughts', thoughtData, config).then((_response)=>{console.log(_response)})
       const actionData = {id: Number(this.envID), action_category: actionValue}
       await axios.post(URL_BASE + 'api/v1/actions', actionData, config).then((_response)=>{console.log(_response)})
+      const reactionData = {id: Number(this.envID), content: reactionValue}
+      await axios.post(URL_BASE + 'api/v1/reactions', reactionData, config).then((_response)=>{console.log(_response)})
     },
     submitPosts() {
       let checkValue = 0
@@ -237,6 +260,9 @@ export default {
         let actionValue = this.actions.map(function( action ){
           return action.value
         })
+        let reactionValue = this.reactions.map(function( reaction ){
+          return reaction.value
+        })
         if (checkValue === PERCENT_MAX) {
           let percentValue = this.percents.map(function( percent ){
             return Number(percent.value)
@@ -244,7 +270,7 @@ export default {
           let categoryValue = this.categorys.map(function( category ){
             return category.value
           })
-          this.submitFunc(situationData, thoughtValue, percentValue, categoryValue, actionValue)
+          this.submitFunc(situationData, thoughtValue, percentValue, categoryValue, actionValue, reactionValue)
           this.errorMessages.pop()
         }else{
           this.errorMessages.pop()
