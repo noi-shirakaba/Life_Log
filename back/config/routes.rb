@@ -6,6 +6,7 @@ Rails.application.routes.draw do
       resources :emotion_labels, only: [:create]
       resources :actions, only: [:create]
       resources :thoughts, only: [:create]
+      resources :reactions, only: [:create]
       resources :users do
         collection do
           post 'login'
