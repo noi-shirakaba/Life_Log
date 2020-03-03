@@ -7,4 +7,8 @@ class Environment < ApplicationRecord
   has_many :reactions
   has_many :thoughts
   belongs_to :user, optional: true
+
+  def environment_count
+    Environment.count
+  end
 end

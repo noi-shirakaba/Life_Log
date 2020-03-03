@@ -15,17 +15,23 @@ const URL_BASE = process.env.VUE_APP_ORIGIN
 export default {
   data(){
     return {
-      environments: []
+      // environments: []
+      pagination: {
+        page_id: 1,
+        total: 0,
+        perPage: 6,
+        visible: 7
+      }
     }
   },
-  mounted() {
-    axios.get(URL_BASE + 'api/v1/environments.json', {
-  		headers: {
-    		Authorization: `Bearer ${this.getToken}`,
-  		}
-		})
-    .then(response => (this.environments = response.data))
-  },
+  // mounted() {
+  //   axios.get(URL_BASE + 'api/v1/environments.json', {
+  // 		headers: {
+  //   		Authorization: `Bearer ${this.getToken}`,
+  // 		}
+	// 	})
+  //   .then(response => (this.environments = response.data))
+  // },
 	computed: {
     ...mapGetters('auth', [
       'getToken',

@@ -2,8 +2,11 @@ module Api::V1
   class EnvironmentsController < ApplicationController
 
     def index
-      @environment = @user.environments.all
-      render :json => @environment
+      # @environment = @user.environments.all
+      offset = (params[:page_id].to_i-1) * 5
+      @environments = Environment.order(created_at: :desc).limit(5).offset(offset)
+      # render :json => @environments
+      render :json => @environments.to_json(:methods => [:environment_count])
     end
 
     def create
