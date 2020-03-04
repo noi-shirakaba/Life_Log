@@ -19,6 +19,9 @@
           :page-class="'page-item'">
         </paginate>
       </v-pagination>
+      <v-row justify="center" class="mt-4">
+        <v-btn class="back-button ma-auto" rounded><a @click="$router.go(-1)">戻る</a></v-btn>
+      </v-row>
     </v-container>
   </div>
 </v-app>
@@ -91,6 +94,10 @@ h2 {
   border-top: 3px solid var(--maincolor);
   margin-top: 40px;
   margin-bottom: 40px;
+}
+.back-button a {
+  text-decoration: none;
+  color: var(--maincolor);
 }
 </style>
 
