@@ -1,18 +1,27 @@
 <template>
-<div class="center">
-  <ul v-for="env in getItems" :key="env.id">
-    <li><router-link :to="{ name: 'Show', params: { id: env.id }}">{{env.situation}}</router-link></li>
-  </ul>
-  <v-pagination v-model="currentPage" :length="getPageCount" :total-visible="7">
-    <paginate
-      :page-range="3"
-      :margin-pages="2"
-      :click-handler="clickCallback"
-      :container-class="'pagination'"
-      :page-class="'page-item'">
-    </paginate>
-  </v-pagination>
-</div>
+<v-app>
+  <div id="index">
+    <h1 class="index-title">ログ管理一覧</h1>
+    <v-container>
+      <ul v-for="env in getItems" :key="env.id">
+        <h2 class="index-day">◯記録日</h2>
+        <li>{{env.created_at}}</li>
+        <h2 class="index-situation">◯環境</h2>
+        <li><router-link :to="{ name: 'Show', params: { id: env.id }}">{{env.situation}}</router-link></li>
+        <hr class="title-line">
+      </ul>
+      <v-pagination v-model="currentPage" :length="getPageCount" :total-visible="7">
+        <paginate
+          :page-range="3"
+          :margin-pages="2"
+          :click-handler="clickCallback"
+          :container-class="'pagination'"
+          :page-class="'page-item'">
+        </paginate>
+      </v-pagination>
+    </v-container>
+  </div>
+</v-app>
 </template>
 
 <script>
@@ -25,7 +34,7 @@ export default {
   data(){
     return {
       environments: [],
-      parPage: 5,
+      parPage: 3,
       currentPage: 1
     }
   },
@@ -59,9 +68,29 @@ export default {
 </script>
 
 <style>
-.center {
+h1 {
+  color: var(--maincolor);
   text-align: center;
 }
-
+h2 {
+  color: var(--maincolor);
+  text-align: left;
+  margin-left: 100px;
+}
+#index ul {
+  list-style: none;
+}
+#index li {
+  margin-left: 100px;
+  margin-bottom: 20px;
+}
+.index-title {
+  margin-top: 40px;
+}
+.title-line {
+  border-top: 3px solid var(--maincolor);
+  margin-top: 40px;
+  margin-bottom: 40px;
+}
 </style>
 
