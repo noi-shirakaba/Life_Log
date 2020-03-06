@@ -70,7 +70,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 h1 {
   color: var(--maincolor);
   text-align: center;
