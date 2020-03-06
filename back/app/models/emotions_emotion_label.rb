@@ -1,4 +1,4 @@
 class EmotionsEmotionLabel < ApplicationRecord
-  # has_many :emotion_labels
-  # belongs_to :emotions_emotion_label
+  belongs_to :emotion
+  belongs_to :emotion_label
 end
