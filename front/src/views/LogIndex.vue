@@ -1,7 +1,7 @@
 <template>
 <v-app>
-	<IndexLink />
-	<Index />
+  <IndexLink />
+  <Index />
 </v-app>
 </template>
 
@@ -9,10 +9,10 @@
 import IndexLink from '@/components/Link.vue'
 import Index from '@/components/Index.vue'
 export default {
-	components: {
-		IndexLink,
-		Index
-	}
+  components: {
+    IndexLink,
+    Index
+  }
 }
 </script>
 
