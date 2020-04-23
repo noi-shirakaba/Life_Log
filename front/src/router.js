@@ -8,7 +8,7 @@ import Home from '@/views/Home.vue'
 import Form  from '@/views/LogForm.vue'
 import Index from '@/views/LogIndex.vue'
 import Show from '@/views/LogShow.vue'
-import Edit from '@/views/Edit.vue'
+import Edit from '@/views/LogEdit.vue'
 import Store from '@/store/index.js'
 
 Vue.use(Router)

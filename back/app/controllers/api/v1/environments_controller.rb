@@ -29,6 +29,20 @@ module Api::V1
       render :json => {environment: @environment, thought: @thought, reaction: @reaction, action: @action, emotion: @emotion, emotions_emotion_label: @emotions_emotion_label, emotion_label: @emotion_label}
     end
 
+    def edit
+      @environment = @user.environments.find(params[:id])
+      @thought = @environment.thoughts
+      @reaction = @environment.reactions
+      @action = @environment.actions
+      @emotion = @environment.emotions
+      @emotions_emotion_label = EmotionsEmotionLabel.where(emotion_id: @emotion[0].id)
+      @emotion_label = []
+      @emotions_emotion_label.each do |emos|
+        @emotion_label.push(EmotionLabel.find(emos.emotion_label_id))
+      end
+      render :json => {environment: @environment, thought: @thought, reaction: @reaction, action: @action, emotion: @emotion, emotions_emotion_label: @emotions_emotion_label, emotion_label: @emotion_label}
+    end
+    
     def update
       @environment = @user.environments.find(params[:id])
       @environment.update(environment_params)
