@@ -118,7 +118,7 @@
           <v-btn
             class="submit-button"
             rounded
-            @click="submit"
+            @click="submitUpdate"
           >
           保存
           </v-btn>
@@ -281,13 +281,61 @@ export default {
       })
     },
     submit(){
-      console.log("update")
-    //   const payload = this.payload
-    //   const data = {situation: this.data.situation}
-    //   console.log(data)
-    //   axios.put(URL_BASE + 'api/v1/environments/' + payload, logdata)
-    //   .then((_response)=>{console.log(_response)})
+      let checkValue = 0
+      const situationData = {situation: this.situation}
+      for (let checkPercent of this.percents) {
+        checkValue = checkValue + Number(checkPercent.value)
+      }
+      if (this.$refs.form.validate()) {
+        let thoughtValue = this.thoughts.map(function( thought ){
+          return thought.value
+        })
+        let actionValue = this.actions.map(function( action ){
+          return action.value
+        })
+        let reactionValue = this.reactions.map(function( reaction ){
+          return reaction.value
+        })
+        if (checkValue === PERCENT_MAX) {
+          let percentValue = this.percents.map(function( percent ){
+            return Number(percent.value)
+          })
+          let categoryValue = this.categorys.map(function( category ){
+            return category.value
+          })
+          this.submitFunc(situationData, thoughtValue, percentValue, categoryValue, actionValue, reactionValue)
+          this.errorMessages.pop()
+        }else{
+          this.errorMessages.pop()
+          this.errorMessages.push('Please make sure the sum of the numbers is 100percent')
+        }
+      }else{
+        this.errorMessages.pop()
+        this.errorMessages.push('There are unfilled items or values ​​that are not valid.')
+      }
     },
+    submitUpdate(){
+      console.log("update")
+      const payload = this.payload
+      const data = {situation: this.data.environment.situation}
+      const config = {headers: {Authorization: `Bearer ${this.getToken}`,}}
+      axios.put(URL_BASE + 'api/v1/environments/' + payload, data, config)
+      .then((_response)=>{console.log(_response)})
+    },
+    // async submitUpdate(situationValue, thoughtValue, percentValue, categoryValue, actionValue, reactionValue) {
+    //   const config = {headers: {Authorization: `Bearer ${this.getToken}`,}}
+    //   await axios.post(URL_BASE + 'api/v1/environments', situationValue, config).then(_response =>(this.envID = _response.data.id))
+    //   const categoryData = {id: Number(this.envID), category: categoryValue}
+    //   await axios.post(URL_BASE + 'api/v1/emotion_labels', categoryData, config).then(_response =>(this.emoID = _response.data))
+    //   const percentData = {emotion_id: Number(this.emoID.emotion.id), emotion_label_id: this.emoID.emotion_label.map(Number), percent: percentValue}
+    //   await axios.post(URL_BASE + 'api/v1/emotions_emotion_labels', percentData, config).then((_response)=>{console.log(_response)})
+    //   const thoughtData = {id: Number(this.envID), thought_content: thoughtValue}
+    //   await axios.post(URL_BASE + 'api/v1/thoughts', thoughtData, config).then((_response)=>{console.log(_response)})
+    //   const actionData = {id: Number(this.envID), action_category: actionValue}
+    //   await axios.post(URL_BASE + 'api/v1/actions', actionData, config).then((_response)=>{console.log(_response)})
+    //   const reactionData = {id: Number(this.envID), content: reactionValue}
+    //   await axios.post(URL_BASE + 'api/v1/reactions', reactionData, config).then((_response)=>{console.log(_response)})
+    // },
     deleteLog(){
       console.log("delete")
     //   const payload = this.payload
