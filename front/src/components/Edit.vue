@@ -280,43 +280,44 @@ export default {
         this.actions.push({id: value.id, value: value.action_category})
       })
     },
-    submit(){
-      let checkValue = 0
-      const situationData = {situation: this.situation}
-      for (let checkPercent of this.percents) {
-        checkValue = checkValue + Number(checkPercent.value)
-      }
-      if (this.$refs.form.validate()) {
-        let thoughtValue = this.thoughts.map(function( thought ){
-          return thought.value
-        })
-        let actionValue = this.actions.map(function( action ){
-          return action.value
-        })
-        let reactionValue = this.reactions.map(function( reaction ){
-          return reaction.value
-        })
-        if (checkValue === PERCENT_MAX) {
-          let percentValue = this.percents.map(function( percent ){
-            return Number(percent.value)
-          })
-          let categoryValue = this.categorys.map(function( category ){
-            return category.value
-          })
-          this.submitFunc(situationData, thoughtValue, percentValue, categoryValue, actionValue, reactionValue)
-          this.errorMessages.pop()
-        }else{
-          this.errorMessages.pop()
-          this.errorMessages.push('Please make sure the sum of the numbers is 100percent')
-        }
-      }else{
-        this.errorMessages.pop()
-        this.errorMessages.push('There are unfilled items or values ​​that are not valid.')
-      }
-    },
+    // submit(){
+    //   let checkValue = 0
+    //   const situationData = {situation: this.situation}
+    //   for (let checkPercent of this.percents) {
+    //     checkValue = checkValue + Number(checkPercent.value)
+    //   }
+    //   if (this.$refs.form.validate()) {
+    //     let thoughtValue = this.thoughts.map(function( thought ){
+    //       return thought.value
+    //     })
+    //     let actionValue = this.actions.map(function( action ){
+    //       return action.value
+    //     })
+    //     let reactionValue = this.reactions.map(function( reaction ){
+    //       return reaction.value
+    //     })
+    //     if (checkValue === PERCENT_MAX) {
+    //       let percentValue = this.percents.map(function( percent ){
+    //         return Number(percent.value)
+    //       })
+    //       let categoryValue = this.categorys.map(function( category ){
+    //         return category.value
+    //       })
+    //       this.submitFunc(situationData, thoughtValue, percentValue, categoryValue, actionValue, reactionValue)
+    //       this.errorMessages.pop()
+    //     }else{
+    //       this.errorMessages.pop()
+    //       this.errorMessages.push('Please make sure the sum of the numbers is 100percent')
+    //     }
+    //   }else{
+    //     this.errorMessages.pop()
+    //     this.errorMessages.push('There are unfilled items or values ​​that are not valid.')
+    //   }
+    // },
     async submitUpdate(){
       console.log("update")
-      console.log(this.thoughts)
+      console.log(this.categorys)
+      console.log(this.percents)
       const payload = this.payload
       const data = {situation: this.data.environment.situation}
       let thoughtValue = this.thoughts.map(function( thought ){
@@ -328,10 +329,17 @@ export default {
       let reactionValue = this.reactions.map(function( reaction ){
           return reaction.value
         })
-      const thoughtData = {id: Number(this.envID), thought_content: thoughtValue}
-      const actionData = {id: Number(this.envID), action_category: actionValue}
-      const reactionData = {id: Number(this.envID), content: reactionValue}
-      console.log(thoughtData)
+      let percentValue = this.percents.map(function( percent ){
+            return Number(percent.value)
+          })
+      let categoryValue = this.categorys.map(function( category ){
+            return category.value
+          })
+      const thoughtData = {id: payload, thought_content: thoughtValue}
+      const actionData = {id: payload, action_category: actionValue}
+      const reactionData = {id: payload, content: reactionValue}
+      const categoryData = {id: payload, category: categoryValue}
+      const percentData = {percent: percentValue}
       const config = {headers: {Authorization: `Bearer ${this.getToken}`,}}
       await axios.put(URL_BASE + 'api/v1/environments/' + payload, data, config)
       .then((_response)=>{console.log(_response)})
@@ -340,6 +348,10 @@ export default {
       await axios.put(URL_BASE + 'api/v1/actions/' + payload, actionData, config)
       .then((_response)=>{console.log(_response)})
       await axios.put(URL_BASE + 'api/v1/reactions/' + payload, reactionData, config)
+      .then((_response)=>{console.log(_response)})
+      await axios.put(URL_BASE + 'api/v1/emotion_labels/' + payload, categoryData, config)
+      .then((_response)=>{console.log(_response)})
+      await axios.put(URL_BASE + 'api/v1/emotions_emotion_labels/' + payload, percentData, config)
       .then((_response)=>{console.log(_response)})
     },
     deleteLog(){

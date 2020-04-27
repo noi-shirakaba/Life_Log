@@ -12,6 +12,19 @@ module Api::V1
 				response_bad_request
 		end
 
+		def update
+      EmotionsEmotionLabel.transaction do
+        emotions_labels_params["percent"].each_with_index do |emotion_percent, i|
+          @id = i + 1
+          @emotion_percent = EmotionsEmotionLabel.find(@id)
+          @emotion_percent.update!(percent: emotion_percent)
+        end
+      end
+        response_success(:emotions_emotion_label, :create)
+      rescue => e
+        response_bad_request
+    end
+
 		def emotions_labels_params
 			params.require(:emotions_emotion_label).permit(:emotion_id, emotion_label_id: [], percent: [])
 		end
