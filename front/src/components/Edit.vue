@@ -314,28 +314,22 @@ export default {
         this.errorMessages.push('There are unfilled items or values ​​that are not valid.')
       }
     },
-    submitUpdate(){
+    async submitUpdate(){
       console.log("update")
+      console.log(this.thoughts)
       const payload = this.payload
       const data = {situation: this.data.environment.situation}
+      let thoughtValue = this.thoughts.map(function( thought ){
+          return thought.value
+        })
+      const thoughtData = {id: Number(this.envID), thought_content: thoughtValue}
+      console.log(thoughtData)
       const config = {headers: {Authorization: `Bearer ${this.getToken}`,}}
-      axios.put(URL_BASE + 'api/v1/environments/' + payload, data, config)
+      await axios.put(URL_BASE + 'api/v1/environments/' + payload, data, config)
+      .then((_response)=>{console.log(_response)})
+      await axios.put(URL_BASE + 'api/v1/thoughts/' + payload, thoughtData, config)
       .then((_response)=>{console.log(_response)})
     },
-    // async submitUpdate(situationValue, thoughtValue, percentValue, categoryValue, actionValue, reactionValue) {
-    //   const config = {headers: {Authorization: `Bearer ${this.getToken}`,}}
-    //   await axios.post(URL_BASE + 'api/v1/environments', situationValue, config).then(_response =>(this.envID = _response.data.id))
-    //   const categoryData = {id: Number(this.envID), category: categoryValue}
-    //   await axios.post(URL_BASE + 'api/v1/emotion_labels', categoryData, config).then(_response =>(this.emoID = _response.data))
-    //   const percentData = {emotion_id: Number(this.emoID.emotion.id), emotion_label_id: this.emoID.emotion_label.map(Number), percent: percentValue}
-    //   await axios.post(URL_BASE + 'api/v1/emotions_emotion_labels', percentData, config).then((_response)=>{console.log(_response)})
-    //   const thoughtData = {id: Number(this.envID), thought_content: thoughtValue}
-    //   await axios.post(URL_BASE + 'api/v1/thoughts', thoughtData, config).then((_response)=>{console.log(_response)})
-    //   const actionData = {id: Number(this.envID), action_category: actionValue}
-    //   await axios.post(URL_BASE + 'api/v1/actions', actionData, config).then((_response)=>{console.log(_response)})
-    //   const reactionData = {id: Number(this.envID), content: reactionValue}
-    //   await axios.post(URL_BASE + 'api/v1/reactions', reactionData, config).then((_response)=>{console.log(_response)})
-    // },
     deleteLog(){
       console.log("delete")
     //   const payload = this.payload
