@@ -322,12 +322,24 @@ export default {
       let thoughtValue = this.thoughts.map(function( thought ){
           return thought.value
         })
+      let actionValue = this.actions.map(function( action ){
+          return action.value
+        })
+      let reactionValue = this.reactions.map(function( reaction ){
+          return reaction.value
+        })
       const thoughtData = {id: Number(this.envID), thought_content: thoughtValue}
+      const actionData = {id: Number(this.envID), action_category: actionValue}
+      const reactionData = {id: Number(this.envID), content: reactionValue}
       console.log(thoughtData)
       const config = {headers: {Authorization: `Bearer ${this.getToken}`,}}
       await axios.put(URL_BASE + 'api/v1/environments/' + payload, data, config)
       .then((_response)=>{console.log(_response)})
       await axios.put(URL_BASE + 'api/v1/thoughts/' + payload, thoughtData, config)
+      .then((_response)=>{console.log(_response)})
+      await axios.put(URL_BASE + 'api/v1/actions/' + payload, actionData, config)
+      .then((_response)=>{console.log(_response)})
+      await axios.put(URL_BASE + 'api/v1/reactions/' + payload, reactionData, config)
       .then((_response)=>{console.log(_response)})
     },
     deleteLog(){
