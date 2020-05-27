@@ -11,7 +11,19 @@ module Api::V1
       rescue => e
         response_bad_request
     end
-    
+
+    def update
+      Thought.transaction do
+        thought_params["thought_content"].each.with_index(1) do |thought, id|
+          @thought = Thought.find(id)
+          @thought.update!(thought_content: thought)
+        end
+      end
+        response_success(:thought, :create)
+      rescue => e
+        response_bad_request
+    end
+
     def thought_params
       params.require(:thought).permit(:id, thought_content: [])
     end

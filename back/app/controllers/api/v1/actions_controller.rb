@@ -12,8 +12,19 @@ module Api::V1
         response_bad_request
     end
 
+    def update
+      Action.transaction do
+        action_params["action_category"].each.with_index(1) do |category, id|
+          @action = Action.find(id)
+          @action.update!(action_category: category)
+        end
+      end
+        response_success(:action, :create)
+      rescue => e
+        response_bad_request
+    end
+
     def action_params
-      # params.require(:action).permit(:id, action_category: [])
       params.permit(:id, action_category: [])
     end
   end

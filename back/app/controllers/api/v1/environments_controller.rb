@@ -1,6 +1,5 @@
 module Api::V1
   class EnvironmentsController < ApplicationController
-
     def index
       @environment = @user.environments.all
       render :json => @environment
