@@ -14,9 +14,8 @@ module Api::V1
 
     def update
       Action.transaction do
-        action_params["action_category"].each_with_index do |category, i|
-          @id = i + 1
-          @action = Action.find(@id)
+        action_params["action_category"].each.with_index(1) do |category, id|
+          @action = Action.find(id)
           @action.update!(action_category: category)
         end
       end
@@ -26,7 +25,6 @@ module Api::V1
     end
 
     def action_params
-      # params.require(:action).permit(:id, action_category: [])
       params.permit(:id, action_category: [])
     end
   end

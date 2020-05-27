@@ -14,9 +14,8 @@ module Api::V1
 
 		def update
       EmotionsEmotionLabel.transaction do
-        emotions_labels_params["percent"].each_with_index do |emotion_percent, i|
-          @id = i + 1
-          @emotion_percent = EmotionsEmotionLabel.find(@id)
+        emotions_labels_params["percent"].each.with_index(1) do |emotion_percent, id|
+          @emotion_percent = EmotionsEmotionLabel.find(id)
           @emotion_percent.update!(percent: emotion_percent)
         end
       end

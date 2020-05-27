@@ -16,9 +16,8 @@ module Api::V1
 
     def update
       EmotionLabel.transaction do
-        emotions_params["category"].each_with_index do |emotion_category, i|
-          @id = i + 1
-          @emotion_label = EmotionLabel.find(@id)
+        emotions_params["category"].each.with_index(1) do |emotion_category, id|
+          @emotion_label = EmotionLabel.find(id)
           @emotion_label.update!(category: emotion_category)
         end
       end

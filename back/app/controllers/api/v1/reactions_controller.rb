@@ -15,9 +15,8 @@ module Api::V1
 
     def update
       Reaction.transaction do
-        reaction_params["content"].each_with_index do |reaction_content, i|
-          @id = i + 1
-          @reaction = Reaction.find(@id)
+        reaction_params["content"].each.with_index(1) do |reaction_content, id|
+          @reaction = Reaction.find(id)
           @reaction.update!(content: reaction_content)
         end
       end

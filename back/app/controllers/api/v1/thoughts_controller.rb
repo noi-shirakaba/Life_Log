@@ -14,9 +14,8 @@ module Api::V1
 
     def update
       Thought.transaction do
-        thought_params["thought_content"].each_with_index do |thought, i|
-          @id = i + 1
-          @thought = Thought.find(@id)
+        thought_params["thought_content"].each.with_index(1) do |thought, id|
+          @thought = Thought.find(id)
           @thought.update!(thought_content: thought)
         end
       end
