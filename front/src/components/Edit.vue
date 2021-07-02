@@ -1,6 +1,55 @@
 <template>
 <v-app id="edit-form-background">
   <h1 class="edit-title">ログの編集</h1>
+  <div class="text-center">
+    <v-dialog
+      v-model="dialog"
+      width="500"
+    >
+      <template v-slot:activator="{ on }">
+        <v-btn
+          color="red lighten-2"
+          dark
+          v-on="on"
+        >
+          削除
+        </v-btn>
+      </template>
+
+      <v-card>
+        <v-card-title
+          class="headline grey lighten-2"
+          primary-title
+        >
+          注意！
+        </v-card-title>
+
+        <v-card-text>
+          ここにある全てのコンテンツを完全削除しますがよろしいでしょうか？※項目ごとの削除ではないのでご注意ください！
+        </v-card-text>
+
+        <v-divider></v-divider>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            color="primary"
+            text
+            @click="deleteLog"
+          >
+            削除する
+          </v-btn>
+          <v-btn
+            color="primary"
+            text
+            @click="dialog = false"
+          >
+            戻る
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+  </div>
   <p v-if="this.errorMessages" class="text-center pt-3">
     <ul>
       <li v-for="error in errorMessages" id="error" :key="error">{{ error }}</li>
@@ -147,6 +196,7 @@ export default {
   data() {
     return {
       valid: false,
+      dialog: false,
       payload: this.$route.params.id,
       data: [],
       thoughts: [{id: '', value: ''}],
@@ -289,12 +339,17 @@ export default {
     //   .then((_response)=>{console.log(_response)})
     },
     deleteLog(){
-      console.log("delete")
-    //   const payload = this.payload
-    //   axios.delete(URL_BASE + 'api/v1/environments/' + payload)
-    //   .then((_response)=>{console.log(_response)})
-    //   this.$router.push({ path: '/index' })
-    //   this.$router.go({ path: '/index' })
+      this.dialog = false
+      const payload = this.payload
+      console.log(payload)
+      axios.delete(URL_BASE + 'api/v1/environments/' + payload, {
+        headers: {
+          Authorization: `Bearer ${this.getToken}`,
+        }
+      })
+      .then((_response)=>{console.log(_response)})
+      this.$router.push({ path: '/index' })
+      this.$router.go({ path: '/index' })
     }
   }
 }
