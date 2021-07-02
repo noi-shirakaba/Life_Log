@@ -5,6 +5,7 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+#! /usr/bin/env ruby
 (1..5).each do |i|
   pp User.create(
     name: "user#{i}",
